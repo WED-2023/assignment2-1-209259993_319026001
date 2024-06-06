@@ -5,6 +5,11 @@
   >
     <div class="recipe-body">
       <img v-if="image_load" :src="recipe.image" class="recipe-image" />
+      <!-- if favorited, show full icon. else, show to favorite icon -->
+      <img v-if="recipe.favorited" src="@/assets/icons/faved.png" class="fav-icon" alt="Favorited" />
+      <img v-else src="@/assets/icons/to-fav.png" class="fav-icon" alt="Favorite" />
+      <!-- viewed icon -->
+      <img v-if="recipe.viewed" src="@/assets/icons/viewed.png" class="viewed-icon" alt="Viewed" />
     </div>
     <div class="recipe-footer">
       <div :title="recipe.title" class="recipe-title">
@@ -13,6 +18,15 @@
       <ul class="recipe-overview">
         <li>{{ recipe.readyInMinutes }} minutes</li>
         <li>{{ recipe.aggregateLikes }} likes</li>
+        <li v-if="recipe.vegetarian">
+          <img src="@/assets/icons/no-meat.png" alt="Vegetarian" class="icon" />
+        </li>
+        <li v-if="recipe.vegan">
+          <img src="@/assets/icons/vegan.png" alt="Vegan" class="icon" />
+        </li>
+        <li v-if="recipe.glutenFree">
+          <img src="@/assets/icons/gluten-free.png" alt="Gluten Free" class="icon" />
+        </li>
       </ul>
     </div>
   </router-link>
@@ -27,38 +41,61 @@ export default {
   },
   data() {
     return {
-      image_load: false
+      image_load: true
     };
   },
   props: {
     recipe: {
       type: Object,
       required: true
+    },
+    id: {
+      type: Number,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    readyInMinutes: {
+      type: Number,
+      required: true
+    },
+    image: {
+      type: String,
+      required: true
+    },
+    aggregateLikes: {
+      type: Number,
+      required: false,
+      default() {
+        return undefined;
+      }
+    },
+    vegetarian: {
+      type: Boolean,
+      required: true
+    },
+    vegan: {
+      type: Boolean,
+      required: true
+    },
+    vegan: {
+      type: Boolean,
+      required: true
+    },
+    glutenFree: {
+      type: Boolean,
+      required: true
+    },
+    viewed: {
+      type: Boolean,
+      required: true
+    },
+    favorited: {
+      type: Boolean,
+      required: true
     }
-
-    // id: {
-    //   type: Number,
-    //   required: true
-    // },
-    // title: {
-    //   type: String,
-    //   required: true
-    // },
-    // readyInMinutes: {
-    //   type: Number,
-    //   required: true
-    // },
-    // image: {
-    //   type: String,
-    //   required: true
-    // },
-    // aggregateLikes: {
-    //   type: Number,
-    //   required: false,
-    //   default() {
-    //     return undefined;
-    //   }
-    // }
   }
 };
 </script>
@@ -88,6 +125,10 @@ export default {
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
+}
+
+.recipe-body {
+  overflow: hidden;
 }
 
 .recipe-preview .recipe-footer {
@@ -138,4 +179,36 @@ export default {
   display: table-cell;
   text-align: center;
 }
+
+.icon {
+  width: 30px;
+  height: 30px;
+}
+
+.recipe-image, .fav-icon {
+  transition: transform 0.3s ease, filter 0.3s ease; 
+}
+
+.recipe-image:hover, .fav-icon:hover {
+  transform: scale(1.1);
+  filter: brightness(0.9);
+}
+
+.fav-icon {
+  position: absolute;
+  top: 10px; 
+  right: 15px; 
+  width: 35px; 
+  height: 35px; 
+  z-index: 10; 
+}
+
+.viewed-icon {
+  right: 55px;
+  position: absolute;
+  top: 12px; 
+  width: 30px; 
+  height: 30px; 
+}
+
 </style>
