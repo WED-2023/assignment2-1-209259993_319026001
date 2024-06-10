@@ -3,19 +3,23 @@
     <div id="nav">
       <router-link class="nava-link" :to="{ name: 'main' }">Home Page</router-link>
       <router-link class="nava-link" :to="{ name: 'search' }">Search</router-link>
-      <span v-if="!$root.store.username">
+      <span v-if="$root.store.username">
         Hello Guest:
         <router-link class="nava-link" :to="{ name: 'register' }">Register</router-link>
         <router-link class="nava-link" :to="{ name: 'login' }">Login</router-link>
       </span>
       <span v-else>
+        <div class="right-align">
         Welcome {{ $root.store.username }}:
         <b-nav-item-dropdown id="my-nav-dropdown" text="Personal" toggle-class="nav-link-custom" right>
           <b-dropdown-item class="dropdown-item-custom">Favorites</b-dropdown-item>
-          <b-dropdown-item class="dropdown-item-custom">Private</b-dropdown-item>
-          <b-dropdown-item class="dropdown-item-custom">La Familia</b-dropdown-item>
+          <b-dropdown-item class="dropdown-item-custom">My Recipes</b-dropdown-item>
+          <b-dropdown-item class="dropdown-item-custom">Family Recipes</b-dropdown-item>
         </b-nav-item-dropdown>
+        <!-- modify page name to new form -->
+        <router-link class="nava-link" :to="{ name: 'new-recipe' }">New Recipe</router-link>
         <button class="logout-button" @click="Logout">Logout</button>
+      </div>
       </span>
     </div>
     <div class="content">
@@ -54,6 +58,7 @@ export default {
   min-height: 100vh;
 }
 
+/* nav bar and nav links design */
 #nav {
   display: flex;
   align-items: center;
@@ -72,6 +77,10 @@ export default {
   color: #ffffff;
 }
 
+#nav a.router-link-exact-active {
+  color: #42b983;
+}
+
 .nava-link {
   color: white;
   text-decoration: none;
@@ -82,6 +91,7 @@ export default {
   text-decoration: underline;
 }
 
+/* logout button design */
 .logout-button {
   background-color: #55629c;
   border: none;
@@ -95,11 +105,18 @@ export default {
   background-color: #35427a;
 }
 
+/* placing register/login section on the right side of page */
+.right-align {
+  top: 12px;
+  right: 10px;
+  position: absolute;
+}
+
+/* Dropdown menu of registered user styling */
 #my-nav-dropdown {
   display: inline-block;
 }
 
-/* Dropdown menu custom styling */
 #my-nav-dropdown .dropdown-menu {
   background-color: #2c3e50 !important;
   border: none !important;
@@ -107,7 +124,6 @@ export default {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
 }
 
-/* Dropdown item custom styling */
 #my-nav-dropdown .dropdown-item-custom {
   color: white !important;
   padding: 10px 20px !important;
@@ -123,11 +139,7 @@ export default {
   color: white !important;
 }
 
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-
+/* padding content so top of page won't be covered by nav bar */
 .content {
   padding-top: 95px; 
 }
