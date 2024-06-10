@@ -80,10 +80,6 @@ export default {
       type: Boolean,
       required: true
     },
-    vegan: {
-      type: Boolean,
-      required: true
-    },
     glutenFree: {
       type: Boolean,
       required: true
