@@ -11,6 +11,18 @@
             <div class="mb-3">
               <div>Ready in {{ recipe.readyInMinutes }} minutes</div>
               <div>Likes: {{ recipe.aggregateLikes }} likes</div>
+              <div>Servings: {{ recipe.servings }} servings</div>
+              <div class="icons-container">
+              <div v-if="recipe.vegetarian">
+                <img src="@/assets/icons/no-meat.png" alt="Vegetarian" class="icon" />
+              </div>
+              <div v-if="recipe.vegan">
+                <img src="@/assets/icons/vegan.png" alt="Vegan" class="icon" />
+              </div>
+              <div v-if="recipe.glutenFree">
+                <img src="@/assets/icons/gluten-free.png" alt="Gluten Free" class="icon" />
+            </div>
+            </div>
             </div>
             Ingredients:
             <ul>
@@ -25,7 +37,7 @@
           <div class="wrapped">
             Instructions:
             <ol>
-              <li v-for="s in recipe._instructions" :key="s.number">
+              <li v-for="s in recipe.instructions" :key="s.number">
                 {{ s.step }}
               </li>
             </ol>
@@ -79,7 +91,11 @@ export default {
         aggregateLikes,
         readyInMinutes,
         image,
-        title
+        title,
+        servings,
+        vegetarian,
+        vegan,
+        glutenFree
       } = response.data.recipe;
 
       let _instructions = analyzedInstructions
@@ -97,7 +113,11 @@ export default {
         aggregateLikes,
         readyInMinutes,
         image,
-        title
+        title,
+        servings,
+        vegetarian,
+        vegan,
+        glutenFree
       };
 
       this.recipe = _recipe;
@@ -121,6 +141,18 @@ export default {
   margin-right: auto;
   width: 50%;
 }
+
+.icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.icons-container {
+display: flex;
+}
+
 /* .recipe-header{
 
 } */

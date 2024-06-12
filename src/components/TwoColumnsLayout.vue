@@ -30,11 +30,11 @@
   }
   
   .column:first-child {
-    margin-right: 10px;
+    margin-right: 5%;
   }
   
   .column:last-child {
-    margin-left: 10px;
+    margin-left: 5%;
   }
   </style>
   

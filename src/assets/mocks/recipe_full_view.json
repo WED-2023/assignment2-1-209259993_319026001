@@ -4,12 +4,37 @@
     "title": "Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs",
     "readyInMinutes": 45,
     "aggregateLikes": 209,
-    "vegetarian": false,
-    "vegan": false,
-    "glutenFree": false,
+    "vegetarian": true,
+    "vegan": true,
+    "glutenFree": true,
     "summary": "You can never have too many main course recipes, so give Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs a try. One serving contains <b>543 calories</b>, <b>17g of protein</b>, and <b>16g of fat</b>. For <b>$1.57 per serving</b>, this recipe <b>covers 22%</b> of your daily requirements of vitamins and minerals. This recipe serves 2. A mixture of butter, white wine, pasta, and a handful of other ingredients are all it takes to make this recipe so yummy. 209 people have tried and liked this recipe. It is brought to you by fullbellysisters.blogspot.com. From preparation to the plate, this recipe takes approximately <b>45 minutes</b>. Taking all factors into account, this recipe <b>earns a spoonacular score of 83%</b>, which is tremendous. If you like this recipe, take a look at these similar recipes: <a href=\"https://spoonacular.com/recipes/pasta-with-garlic-scallions-cauliflower-breadcrumbs-1230187\">Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs</a>, <a href=\"https://spoonacular.com/recipes/pasta-with-garlic-scallions-cauliflower-breadcrumbs-1229807\">Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs</a>, and <a href=\"https://spoonacular.com/recipes/pasta-with-garlic-scallions-cauliflower-breadcrumbs-1229669\">Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs</a>.",
     "analyzedInstructions": [],
-    "instructions": "",
+    "instructions": [
+        {
+          "number": 1,
+          "step": "Melt 1 tbsp butter in a large skillet over medium heat. Add about 2 cups frozen cauliflower florets, thawed, cut into bite-sized pieces, season with salt and pepper, and cook until browned and tender, about 10-15 minutes."
+        },
+        {
+          "number": 2,
+          "step": "While the cauliflower is cooking, cook 6-8 ounces pasta (I used linguine) according to package instructions until al dente. Drain and set aside."
+        },
+        {
+          "number": 3,
+          "step": "In the same skillet, add 1-2 tbsp extra virgin olive oil, 5-6 cloves garlic, and 3 scallions, chopped, white and green parts separated. Cook until fragrant, about 2 minutes."
+        },
+        {
+          "number": 4,
+          "step": "Add 2-3 tbsp white wine and cook for 1 minute, scraping up any browned bits from the bottom of the skillet."
+        },
+        {
+          "number": 5,
+          "step": "Add cooked pasta to the skillet and toss to combine. Cook for 2-3 minutes until heated through."
+        },
+        {
+          "number": 6,
+          "step": "Remove from heat and sprinkle with 2 tbsp grated cheese (I used romano) and 1/4 cup whole wheat bread crumbs (I used panko). Serve immediately."
+        }
+      ],
     "extendedIngredients": [
         {
             "id": 1001,

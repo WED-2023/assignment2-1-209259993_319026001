@@ -24,7 +24,7 @@
       </template>
       <template #right-column>
         <!-- if user is not logged in -->
-        <div v-if="$root.store.username" class="login-container">
+        <div v-if="!$root.store.username" class="login-container">
           <Login />
         </div>
         <!-- if user is logged in -->
@@ -96,6 +96,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full viewport height */
+  height: 100vh; 
 }
 </style>
