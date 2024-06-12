@@ -3,10 +3,12 @@
     <div id="nav">
       <router-link class="nava-link" :to="{ name: 'main' }">Home Page</router-link>
       <router-link class="nava-link" :to="{ name: 'search' }">Search</router-link>
-      <span v-if="$root.store.username">
+      <span v-if="!$root.store.username">
+        <div class="right-align-not-reg">
         Hello Guest:
         <router-link class="nava-link" :to="{ name: 'register' }">Register</router-link>
         <router-link class="nava-link" :to="{ name: 'login' }">Login</router-link>
+      </div>
       </span>
       <span v-else>
         <div class="right-align">
@@ -106,10 +108,17 @@ export default {
 }
 
 /* placing register/login section on the right side of page */
-.right-align {
-  top: 12px;
+.right-align, .right-align-not-reg {
   right: 10px;
   position: absolute;
+}
+
+.right-align {
+  top: 12px;
+}
+
+.right-align-not-reg {
+  top: 20px;
 }
 
 /* Dropdown menu of registered user styling */

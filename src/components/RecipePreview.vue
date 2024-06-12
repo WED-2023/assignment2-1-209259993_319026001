@@ -6,10 +6,12 @@
     <div class="recipe-body">
       <img v-if="image_load" :src="recipe.image" class="recipe-image" />
       <!-- if favorited, show full icon. else, show to favorite icon -->
-      <img v-if="recipe.favorited" src="@/assets/icons/faved.png" class="fav-icon" alt="Favorited" />
-      <img v-else src="@/assets/icons/to-fav.png" class="fav-icon" alt="Favorite" />
-      <!-- viewed icon -->
-      <img v-if="recipe.viewed" src="@/assets/icons/viewed.png" class="viewed-icon" alt="Viewed" />
+      <button class="fav-button" @click="addToFav(recipe.id); $event.stopPropagation()">
+        <img v-show="!fav" src="@/assets/icons/to-fav.png" class="fav-icon" alt="Favorite" />
+        <img v-show="fav" src="@/assets/icons/faved.png" class="fav-icon" alt="Favorited" />
+      </button>
+      <!-- if viewed, show viewed icon. -->
+      <img v-if="viewed" src="@/assets/icons/viewed.png" class="viewed-icon" alt="Viewed" />
     </div>
     <div class="recipe-footer">
       <div :title="recipe.title" class="recipe-title">
@@ -33,15 +35,46 @@
 </template>
 
 <script>
+// import mock functions of user
+import { mockAddFavorite, mockIsInFav, mockIsViewed } from '../services/user.js'; // Import the mock function
 export default {
   mounted() {
     this.axios.get(this.recipe.image).then((i) => {
       this.image_load = true;
     });
+    // variables to save status of favorite adding and viewing of recipe by user
+    this.fav = this.isFav(this.recipe.id);
+    this.viewed = this.isViewed(this.recipe.id);
+  },
+  methods: {
+    // method to check if recipe is favorited by user
+    isFav(recipeId) {
+      const response = mockIsInFav(recipeId);
+      return response.response.data.success;
+    },
+    // method to check if recipe is viewed by user
+    isViewed(recipeId) {
+      const response = mockIsViewed(recipeId);
+      return response.response.data.success;
+    },
+    // method to add recipe to user's favorite recipes
+    addToFav(recipeId) {
+      console.log("addToFav called");
+      const response = mockAddFavorite(recipeId);
+      if (response.response.data.success === true) {
+        this.fav = true;
+        console.log("successfully added to favorites");
+      } else {
+        console.error("Failed to add to favorites:", response.response.data.message);
+      }
+    }
   },
   data() {
     return {
-      image_load: true
+      // return variables
+      image_load: true,
+      viewed: false,
+      fav: false
     };
   },
   props: {
@@ -81,14 +114,6 @@ export default {
       required: true
     },
     glutenFree: {
-      type: Boolean,
-      required: true
-    },
-    viewed: {
-      type: Boolean,
-      required: true
-    },
-    favorited: {
       type: Boolean,
       required: true
     }

@@ -17,11 +17,11 @@
         <b-form-invalid-feedback v-if="!$v.form.username.required">
           Username is required
         </b-form-invalid-feedback>
-        <b-form-invalid-feedback v-else-if="!$v.form.username.length">
-          Username length should be between 3-8 characters long
+        <b-form-invalid-feedback v-else-if="$v.form.username.$dirty && ($v.form.username.$model.length < 3 || $v.form.username.$model.length > 8)">
+          Username length should be between 3 and 8 characters long
         </b-form-invalid-feedback>
         <b-form-invalid-feedback v-if="!$v.form.username.alpha">
-          Username alpha
+          Username should contain alphabetic characters only
         </b-form-invalid-feedback>
       </b-form-group>
 
@@ -62,10 +62,16 @@
           For that, your password should be also:
         </b-form-text>
         <b-form-invalid-feedback
-          v-if="$v.form.password.required && !$v.form.password.length"
-        >
-          Have length between 5-10 characters long
+          v-if="$v.form.password.required && !$v.form.password.length">
+            Have length between 5-10 characters long
         </b-form-invalid-feedback>
+        <b-form-invalid-feedback
+          v-if="$v.form.password.required && !containsNumber($v.form.password.$model)">
+          Password should contain at least one number
+        </b-form-invalid-feedback>
+        <b-form-invalid-feedback v-if="$v.form.password.required && !containsSpecialChar($v.form.password.$model)">
+          Password should contain at least one special character
+      </b-form-invalid-feedback>
       </b-form-group>
 
       <b-form-group
@@ -175,6 +181,12 @@ export default {
     // console.log($v);
   },
   methods: {
+    containsNumber(password) {
+      return /\d/.test(password); // Returns true if password contains at least one number
+    },
+    containsSpecialChar(password) {
+      return /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password); // Returns true if password contains at least one special character
+    },
     validateState(param) {
       const { $dirty, $error } = this.$v.form[param];
       return $dirty ? !$error : null;
