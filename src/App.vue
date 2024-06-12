@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link class="nava-link" :to="{ name: 'main' }">Home Page</router-link>
+      <router-link class="nava-link" :to="{ name: 'main' }">Home</router-link>
       <router-link class="nava-link" :to="{ name: 'search' }">Search</router-link>
       <span v-if="!$root.store.username">
         <div class="right-align-not-reg">
@@ -151,5 +151,23 @@ export default {
 /* padding content so top of page won't be covered by nav bar */
 .content {
   padding-top: 95px; 
+}
+
+/* For Webkit (Chrome &Safari) */
+::-webkit-scrollbar {
+  width: 12px; /* width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff; /* color of the track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #182736; /* color of the scrollbar thumb */
+  border-radius: 6px; /* roundness of the scrollbar thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2c3e50; /* color of the scrollbar thumb on hover */
 }
 </style>
