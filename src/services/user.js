@@ -12,6 +12,11 @@ import recipe_preview from "../assets/mocks/recipe_preview.json";
 
   }
 
+  /* mock function to mark recipe as viewed */
+  export function mockViewRecipe(recipeId) {
+    return { status: 200, response: { data: { message: "The recipe was marked as viewed", success: true}} };
+  }
+
   /* mock function to check if recipe is already favorited */
   export function mockIsInFav(recipeId) {
     if (recipeId >= 1 && recipeId <= 2000) {
@@ -29,7 +34,7 @@ import recipe_preview from "../assets/mocks/recipe_preview.json";
         status: 404,
         response: {
           data: {
-            message: "Recipe not found.",
+            message: "Recipe not found in favorites.",
             success: false,
           }
         }
@@ -54,7 +59,7 @@ export function mockIsViewed(recipeId) {
       status: 404,
       response: {
         data: {
-          message: "Recipe was not viewed by user.",
+          message: "Recipe not found in viewed recipes.",
           success: false,
         }
       }

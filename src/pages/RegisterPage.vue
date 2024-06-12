@@ -96,6 +96,27 @@
         </b-form-invalid-feedback>
       </b-form-group>
 
+        <!-- Email Input -->
+        <b-form-group
+        id="input-group-Email"
+        label-cols-sm="3"
+        label="Email:"
+        label-for="email"
+      >
+        <b-form-input
+          id="email"
+          type="email"
+          v-model="$v.form.email.$model"
+          :state="validateState('email')"
+        ></b-form-input>
+        <b-form-invalid-feedback v-if="!$v.form.email.required">
+          Email is required
+        </b-form-invalid-feedback>
+        <b-form-invalid-feedback v-if="$v.form.email.required && !$v.form.email.email">
+          Must be a valid email address
+        </b-form-invalid-feedback>
+      </b-form-group>
+
       <b-button type="reset" variant="danger">Reset</b-button>
       <b-button
         type="submit"
@@ -118,6 +139,7 @@
     >
       Register failed: {{ form.submitError }}
     </b-alert>
+    <!-- testing the data sent from the form -->
     <!-- <b-card class="mt-3 md-3" header="Form Data Result">
       <pre class="m-0"><strong>form:</strong> {{ form }}</pre>
       <pre class="m-0"><strong>$v.form:</strong> {{ $v.form }}</pre>
@@ -167,11 +189,17 @@ export default {
       },
       password: {
         required,
-        length: (p) => minLength(5)(p) && maxLength(10)(p)
+        length: (p) => minLength(5)(p) && maxLength(10)(p),
+        containsNumber: (p) => /\d/.test(p),
+        containsSpecialChar: (p) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(p)
       },
       confirmedPassword: {
         required,
         sameAsPassword: sameAs("password")
+      },
+      email: {
+        required,
+        email
       }
     }
   },
@@ -208,8 +236,8 @@ export default {
           username: this.form.username,
           password: this.form.password
         };
-
-        const response = mockRegister(userDetails);
+        
+        const response = mockRegister(userDetails)
 
         this.$router.push("/login");
         // console.log(response);

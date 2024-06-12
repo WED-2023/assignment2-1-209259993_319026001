@@ -2,6 +2,7 @@
   <router-link
     :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
     class="recipe-preview"
+    @click.native="markAsViewed(recipe.id)" 
   >
     <div class="recipe-body">
       <img v-if="image_load" :src="recipe.image" class="recipe-image" />
@@ -36,7 +37,7 @@
 
 <script>
 // import mock functions of user
-import { mockAddFavorite, mockIsInFav, mockIsViewed } from '../services/user.js'; // Import the mock function
+import { mockAddFavorite, mockIsInFav, mockIsViewed, mockViewRecipe } from '../services/user.js'; // Import the mock function
 export default {
   mounted() {
     this.axios.get(this.recipe.image).then((i) => {
@@ -66,6 +67,16 @@ export default {
         console.log("successfully added to favorites");
       } else {
         console.error("Failed to add to favorites:", response.response.data.message);
+      }
+    },
+    // method to mark recipe as viewed
+    markAsViewed(recipeId) {
+      const response = mockViewRecipe(recipeId);
+      if (response.response.data.success === true) {
+        this.viewed = true;
+        console.log("successfully marked as viewed");
+      } else {
+        console.error("Failed to mark as viewed:", response.response.data.message);
       }
     }
   },
