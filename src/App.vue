@@ -150,7 +150,7 @@ export default {
 
 /* padding content so top of page won't be covered by nav bar */
 .content {
-  padding-top: 95px; 
+  padding-top:  80px; 
 }
 
 /* For Webkit (Chrome &Safari) */

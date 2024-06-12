@@ -1,12 +1,81 @@
 {
-    "id": 716429,
-    "image": "https://img.spoonacular.com/recipes/716429-556x370.jpg",
-    "title": "Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs",
-    "readyInMinutes": 45,
-    "aggregateLikes": 209,
-    "vegetarian": true,
-    "vegan": true,
-    "glutenFree": true,
-    "summary": "You can never have too many main course recipes, so give Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs a try. One serving contains <b>543 calories</b>, <b>17g of protein</b>, and <b>16g of fat</b>. For <b>$1.57 per serving</b>, this recipe <b>covers 22%</b> of your daily requirements of vitamins and minerals. This recipe serves 2. A mixture of butter, white wine, pasta, and a handful of other ingredients are all it takes to make this recipe so yummy. 209 people have tried and liked this recipe. It is brought to you by fullbellysisters.blogspot.com. From preparation to the plate, this recipe takes approximately <b>45 minutes</b>. Taking all factors into account, this recipe <b>earns a spoonacular score of 83%</b>, which is tremendous. If you like this recipe, take a look at these similar recipes: <a href=\"https://spoonacular.com/recipes/pasta-with-garlic-scallions-cauliflower-breadcrumbs-1230187\">Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs</a>, <a href=\"https://spoonacular.com/recipes/pasta-with-garlic-scallions-cauliflower-breadcrumbs-1229807\">Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs</a>, and <a href=\"https://spoonacular.com/recipes/pasta-with-garlic-scallions-cauliflower-breadcrumbs-1229669\">Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs</a>."
-
-}
+    "recipes": [
+      {
+        "id": 716429,
+        "image": "https://cdn.loveandlemons.com/wp-content/uploads/2022/01/cauliflower-pasta-recipes.jpg",
+        "title": "Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs",
+        "readyInMinutes": 45,
+        "aggregateLikes": 209,
+        "vegetarian": false,
+        "vegan": false,
+        "glutenFree": false,
+        "summary": "You can never have too many main course recipes, so give Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs a try. One serving contains <b>543 calories</b>, <b>17g of protein</b>, and <b>16g of fat</b>. For <b>$1.57 per serving</b>, this recipe <b>covers 22%</b> of your daily requirements of vitamins and minerals. This recipe serves 2. A mixture of butter, white wine, pasta, and a handful of other ingredients are all it takes to make this recipe so yummy. 209 people have tried and liked this recipe. It is brought to you by fullbellysisters.blogspot.com. From preparation to the plate, this recipe takes approximately <b>45 minutes</b>. Taking all factors into account, this recipe <b>earns a spoonacular score of 83%</b>, which is tremendous. If you like this recipe, take a look at these similar recipes: <a href=\"https://spoonacular.com/recipes/pasta-with-garlic-scallions-cauliflower-breadcrumbs-1230187\">Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs</a>, <a href=\"https://spoonacular.com/recipes/pasta-with-garlic-scallions-cauliflower-breadcrumbs-1229807\">Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs</a>, and <a href=\"https://spoonacular.com/recipes/pasta-with-garlic-scallions-cauliflower-breadcrumbs-1229669\">Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs</a>."
+      },
+      {
+        "id": 716430,
+        "image": "https://www.eatingwell.com/thmb/dLzQYccTdptLLN_-3KPjWnF9sCQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/vegan-medit-lentil-soup-1244-24a3c52cba884b00867fd834988c52b0.jpg",
+        "title": "Vegan Lentil Soup",
+        "readyInMinutes": 30,
+        "aggregateLikes": 150,
+        "vegetarian": true,
+        "vegan": true,
+        "glutenFree": true,
+        "summary": "This Vegan Lentil Soup recipe is delicious! One serving contains <b>320 calories</b>, <b>20g of protein</b>, and <b>5g of fat</b>. For <b>$0.75 per serving</b>, this recipe <b>covers 25%</b> of your daily requirements of vitamins and minerals. It serves 4. This recipe from Food.com requires lentils, carrots, onions, and a few other ingredients. 150 people have tried and liked this recipe. From preparation to the plate, this recipe takes about <b>30 minutes</b>. Taking all factors into account, this recipe <b>earns a spoonacular score of 95%</b>, which is spectacular. If you like this recipe, you might also like recipes such as <a href=\"https://spoonacular.com/recipes/vegan-lentil-soup-716429\">Vegan Lentil Soup</a>, <a href=\"https://spoonacular.com/recipes/vegan-lentil-soup-716431\">Vegan Lentil Soup</a>, and <a href=\"https://spoonacular.com/recipes/vegan-lentil-soup-716432\">Vegan Lentil Soup</a>."
+      },
+      {
+        "id": 716431,
+        "image": "https://www.allrecipes.com/thmb/Pow6PE9UyushNDB4wutXNnmriX8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/85389-gourmet-mushroom-risotto-86-7a2d218f53e94ccfaecc69b6fd93cab8.jpg",
+        "title": "Mushroom Risotto",
+        "readyInMinutes": 40,
+        "aggregateLikes": 180,
+        "vegetarian": true,
+        "vegan": false,
+        "glutenFree": true,
+        "summary": "Mushroom Risotto might be just the main course you are searching for. One serving contains <b>444 calories</b>, <b>9g of protein</b>, and <b>11g of fat</b>. For <b>$2.09 per serving</b>, this recipe <b>covers 4%</b> of your daily requirements of vitamins and minerals. It serves 4. If you have white wine, risotto rice, parmesan, and a few other ingredients on hand, you can make it. 180 people have made this recipe and would make it again. From preparation to the plate, this recipe takes around <b>40 minutes</b>. All things considered, we decided this recipe <b>deserves a spoonacular score of 95%</b>. This score is amazing. If you like this recipe, take a look at these similar recipes: <a href=\"https://spoonacular.com/recipes/mushroom-risotto-716429\">Mushroom Risotto</a>, <a href=\"https://spoonacular.com/recipes/mushroom-risotto-716430\">Mushroom Risotto</a>, and <a href=\"https://spoonacular.com/recipes/mushroom-risotto-716432\">Mushroom Risotto</a>."
+      },
+      {
+        "id": 716432,
+        "image": "https://whatsgabycooking.com/wp-content/uploads/2023/06/Dinner-Party-__-Traditional-Caprese-1-1200x800-1.jpg",
+        "title": "Caprese Salad",
+        "readyInMinutes": 15,
+        "aggregateLikes": 120,
+        "vegetarian": true,
+        "vegan": false,
+        "glutenFree": true,
+        "summary": "Caprese Salad might be just the main course you are searching for. One serving contains <b>120 calories</b>, <b>5g of protein</b>, and <b>8g of fat</b>. For <b>$1.50 per serving</b>, this recipe <b>covers 10%</b> of your daily requirements of vitamins and minerals. It serves 1. It is brought to you by Rasa Malaysia. A mixture of basil, extra virgin olive oil, fresh mozzarella, and a handful of other ingredients are all it takes to make this recipe so yummy. 120 people have tried and liked this recipe. From preparation to the plate, this recipe takes approximately <b>15 minutes</b>. Taking all factors into account, this recipe <b>earns a spoonacular score of 91%</b>, which is excellent."
+      },
+      {
+        "id": 716433,
+        "image": "https://cdn.loveandlemons.com/wp-content/uploads/2023/08/vegetarian-stuffed-peppers.jpg",
+        "title": "Vegetarian Stuffed Bell Peppers",
+        "readyInMinutes": 60,
+        "aggregateLikes": 180,
+        "vegetarian": true,
+        "vegan": false,
+        "glutenFree": true,
+        "summary": "Vegetarian Stuffed Bell Peppers are a delicious and nutritious meal. Each serving contains <b>300 calories</b>, <b>12g of protein</b>, and <b>8g of fat</b>. For <b>$2.50 per serving</b>, this recipe <b>covers 15%</b> of your daily requirements of vitamins and minerals. It serves 4. If you have bell peppers, quinoa, black beans, and a few other ingredients on hand, you can make it. 180 people have made this recipe and would make it again. From preparation to the plate, this recipe takes around <b>60 minutes</b>. With a spoonacular score of <b>90%</b>, this dish is amazing. If you like this recipe, take a look at these similar recipes: <a href=\"https://spoonacular.com/recipes/vegetarian-stuffed-bell-peppers-716433\">Vegetarian Stuffed Bell Peppers</a>, <a href=\"https://spoonacular.com/recipes/vegetarian-stuffed-bell-peppers-716434\">Vegetarian Stuffed Bell Peppers</a>, and <a href=\"https://spoonacular.com/recipes/vegetarian-stuffed-bell-peppers-716435\">Vegetarian Stuffed Bell Peppers</a>."
+      },
+      {
+        "id": 716434,
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxvPTZENbXTA1AiatSWJe3SnJ5CU6InLOiwg&s",
+        "title": "Quinoa Salad with Chickpeas and Avocado",
+        "readyInMinutes": 20,
+        "aggregateLikes": 150,
+        "vegetarian": true,
+        "vegan": true,
+        "glutenFree": true,
+        "summary": "Quinoa Salad with Chickpeas and Avocado is a quick and easy salad that's perfect for lunch or a light dinner. Each serving contains <b>320 calories</b>, <b>10g of protein</b>, and <b>15g of fat</b>. For <b>$2.25 per serving</b>, this recipe <b>covers 20%</b> of your daily requirements of vitamins and minerals. It serves 2. If you have quinoa, chickpeas, avocado, and a few other ingredients on hand, you can make it. 150 people have made this recipe and would make it again. From preparation to the plate, this recipe takes around <b>20 minutes</b>. With a spoonacular score of <b>95%</b>, this dish is amazing. If you like this recipe, take a look at these similar recipes: <a href=\"https://spoonacular.com/recipes/quinoa-salad-with-chickpeas-and-avocado-716434\">Quinoa Salad with Chickpeas and Avocado</a>, <a href=\"https://spoonacular.com/recipes/quinoa-salad-with-chickpeas-and-avocado-716435\">Quinoa Salad with Chickpeas and Avocado</a>, and <a href=\"https://spoonacular.com/recipes/quinoa-salad-with-chickpeas-and-avocado-716436\">Quinoa Salad with Chickpeas and Avocado</a>."
+      },
+      {
+        "id": 716435,
+        "image": "https://www.budgetbytes.com/wp-content/uploads/2022/02/Spinach-and-Mushroom-Quesadillas-hand.jpg",
+        "title": "Spinach and Mushroom Quesadillas",
+        "readyInMinutes": 25,
+        "aggregateLikes": 120,
+        "vegetarian": true,
+        "vegan": false,
+        "glutenFree": false,
+        "summary": "Spinach and Mushroom Quesadillas are a delicious and easy-to-make meal. Each serving contains <b>250 calories</b>, <b>8g of protein</b>, and <b>10g of fat</b>. For <b>$1.75 per serving</b>, this recipe <b>covers 10%</b> of your daily requirements of vitamins and minerals. It serves 4. If you have spinach, mushrooms, tortillas, and a few other ingredients on hand, you can make it. 120 people have made this recipe and would make it again. From preparation to the plate, this recipe takes around <b>25 minutes</b>. With a spoonacular score of <b>85%</b>, this dish is great. If you like this recipe, take a look at these similar recipes: <a href=\"https://spoonacular.com/recipes/spinach-and-mushroom-quesadillas-716435\">Spinach and Mushroom Quesadillas</a>, <a href=\"https://spoonacular.com/recipes/spinach-and-mushroom-quesadillas-716436\">Spinach and Mushroom Quesadillas</a>, and <a href=\"https://spoonacular.com/recipes/spinach-and-mushroom-quesadillas-716437\">Spinach and Mushroom Quesadillas</a>."
+      }
+    ]}
+  

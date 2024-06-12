@@ -55,6 +55,24 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    // function to get the last viewed recipes of user, using mock function of get receipes preview
+    async lastViewedRecipes() {
+      try {
+        // const response = await this.axios.get(
+        //   this.$root.store.server_domain + "/recipes/random",
+        // );
+
+        const amountToFetch = 3; // Set this to how many recipes you want to fetch
+        const response = mockGetRecipesPreview(amountToFetch);
+        console.log(response);
+        const recipes = response.data.recipes;
+        console.log(recipes);
+        this.recipes = [];
+        this.recipes.push(...recipes);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 };

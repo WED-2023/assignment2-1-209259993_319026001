@@ -5,10 +5,10 @@ import recipe_preview from "../assets/mocks/recipe_preview.json";
 
 export function mockGetRecipesPreview(amount = 1) {
   let recipes = [];
-  for(let i = 0; i < amount; i++){
-    recipes.push(recipe_preview);
-  }
-
+  // Shuffle the recipes array to randomize the order
+  recipe_preview.recipes.sort(() => Math.random() - 0.5);
+  // Get the first recipes from the shuffled array according to amount
+  recipes = recipe_preview.recipes.slice(0, amount);
   return { data: { recipes: recipes } };
 }
 

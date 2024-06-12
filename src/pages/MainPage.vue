@@ -17,13 +17,20 @@
     <div>
     <TwoColumnsLayout>
       <template #left-column>
-        <RecipePreviewList title="Explore these recipes" class="RandomRecipes center" />
+        <RecipePreviewList ref="recipePreviewList" title="Explore these recipes" class="RandomRecipes center" />
         <div class="button-container">
-          <b-button variant="dark" class="button-element">More</b-button>
+          <b-button variant="dark" class="button-element" @click="fetchNewRecipes">More</b-button>
         </div>
       </template>
       <template #right-column>
-        <p>This is the content of the right column.</p>
+        <!-- if user is not logged in -->
+        <div v-if="$root.store.username" class="login-container">
+          <Login />
+        </div>
+        <!-- if user is logged in -->
+        <div v-else>
+          <RecipePreviewList ref="recipeLastViewedList" title="Last Viewed Recipes" class="RandomRecipes center" />
+        </div>
       </template>
     </TwoColumnsLayout>
   </div>
@@ -40,11 +47,21 @@
 <script>
 import RecipePreviewList from "../components/RecipePreviewList";
 import TwoColumnsLayout from '../components/TwoColumnsLayout';
+import Login from '../pages/LoginPage';
 export default {
   components: {
     RecipePreviewList,
-    TwoColumnsLayout
-  }
+    TwoColumnsLayout,
+    Login
+  },
+  methods: {
+    fetchNewRecipes() {
+      this.$refs.recipePreviewList.updateRecipes();
+    },
+    getLastViewedRecipes() {
+      this.$refs.recipeLastViewedList.lastViewedRecipes();
+    }
+  } 
 };
 </script>
 
@@ -73,5 +90,12 @@ export default {
 
 .button-element:hover {
   background-color: #2c3e50;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
 }
 </style>
