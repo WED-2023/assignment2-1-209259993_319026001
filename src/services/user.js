@@ -66,4 +66,23 @@ export function mockIsViewed(recipeId) {
     };
   }
 }
+
+// src/services/user.js
+
+
+export function mockSearchRecipe(searchCriteria) {
+  // Simulate asynchronous behavior with setTimeout
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      // Simulate successful search
+      resolve({ status: 200, response: { recipes: recipe_preview.recipes } });
+      
+      // Simulate error
+      // reject({ status: 500, response: { message: "Internal Server Error" } });
+    }, 1000); // Simulating 1 second delay
+  });
+}
+
+
+
   

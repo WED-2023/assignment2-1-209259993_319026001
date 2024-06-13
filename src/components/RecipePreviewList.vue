@@ -73,6 +73,22 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    async lastSearchRecipes(amountToFetch) {
+      try {
+        // const response = await this.axios.get(
+        //   this.$root.store.server_domain + "/recipes/random",
+        // );
+
+        const response = mockGetRecipesPreview(amountToFetch);
+        console.log(response);
+        const recipes = response.data.recipes;
+        console.log(recipes);
+        this.recipes = [];
+        this.recipes.push(...recipes);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 };
