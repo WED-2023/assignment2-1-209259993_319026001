@@ -33,11 +33,6 @@ const routes = [
     component: NotFound,
   },
   {
-    path: "/new",
-    name: "new-recipe",
-    component: () => import("./pages/RecipeViewPage"),
-  },
-  {
     path: "/about",
     name: "about",
     component: () => import("./pages/AboutPage"),
@@ -46,6 +41,11 @@ const routes = [
     path: "/results",
     name: "results",
     component: () => import("./pages/SearchResultsPage"),
+  },
+  {
+    path: "/new-recipe",
+    name: "new-recipe",
+    component: () => import("./pages/NewRecipePage"),
   }
 ];
 

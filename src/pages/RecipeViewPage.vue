@@ -152,8 +152,4 @@ export default {
 .icons-container {
 display: flex;
 }
-
-/* .recipe-header{
-
-} */
 </style>
