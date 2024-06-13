@@ -15,4 +15,9 @@ export function mockGetRecipesPreview(amount = 1) {
 export function mockGetRecipeFullDetails(recipeId) {
     return { data: { recipe: recipe_full_view }, status: 200 } ;
   }
+
+export function mockSearchDatabase(search, cuisine, diet, intolerance) {
+  // just return existing recipes because it's a mock
+  return { data: { recipes: recipe_preview.recipes }, status: 200 } ;
+}
   

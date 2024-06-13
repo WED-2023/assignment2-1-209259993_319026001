@@ -21,7 +21,7 @@
   <div class="form-group">
     <label for="cuisine">Cuisine:</label>
     <select id="cuisine" v-model="selectedCuisine" class="form-control">
-      <option value="">No Filter</option>
+      <option value="No Filter">No Filter</option>
       <option v-for="cuisine in cuisines" :key="cuisine" :value="cuisine">{{ cuisine }}</option>
     </select>
   </div>
@@ -30,7 +30,7 @@
   <div class="form-group">
     <label for="diet">Diet:</label>
     <select id="diet" v-model="selectedDiet" class="form-control">
-      <option value="">No Filter</option>
+      <option value="No Filter">No Filter</option>
       <option v-for="diet in diets" :key="diet" :value="diet">{{ diet }}</option>
     </select>
   </div>
@@ -39,21 +39,21 @@
   <div class="form-group">
     <label for="intolerance">Intolerance:</label>
     <select id="intolerance" v-model="selectedIntolerance" class="form-control">
-      <option value="">No Filter</option>
+      <option value="No Filter">No Filter</option>
       <option v-for="intolerance in intolerances" :key="intolerance" :value="intolerance">{{ intolerance }}</option>
     </select>
   </div>
 
   <!-- Search Button -->
-  <button @click="performSearch" class="btn btn-primary">Search</button>
+  <button @click="search" class="btn btn-primary">Search</button>
 </template>
 
 
       <template #right-column>
-        <!-- if user is not logged in -->
-        <div v-if="$root.store.username" class="login-container">
+        <!-- if user is logged in -->
+        <div v-if="$root.store.username" class="last-search-container">
           <h3> Hey {{ $root.store.username }},</h3>
-          <RecipePreviewList ref="recipeLastViewedList" title="Here is your Last search:" class="RandomRecipes center" />
+          <RecipePreviewList ref="recipeLastViewedList" title="Here is your last search:" class="RandomRecipes center" />
         </div>
       </template>
     </TwoColumnsLayout>
@@ -63,7 +63,7 @@
 <script>
 import RecipePreviewList from "../components/RecipePreviewList.vue";
 import TwoColumnsLayout from "../components/TwoColumnsLayout.vue";
-import countries from "../assets/countries";
+import cuisine from "../assets/cuisine";
 import intolerances from "../assets/intolerances";
 import diets from "../assets/diets";
 
@@ -78,38 +78,24 @@ export default {
       lastSearchRecipes: [], // Store for last search recipes
       filteredRecipes: [], // Store for current search results
       searchQuery: "", // User input for recipe search
-      selectedCuisine: null, //why null? because we want to show all recipes if no cuisine is selected
-      selectedDiet: null,
-      selectedIntolerance: null,
+      selectedCuisine: "No Filter", // as requested in assignment
+      selectedDiet: "No Filter",
+      selectedIntolerance: "No Filter",
       intolerances: intolerances, // Import from intolerances.js file
       diets: diets, // Import from diets.js file
-      cuisines: countries // Import from countries.js file
+      cuisines: cuisine // Import from countries.js file
     };
   },
   methods: {
-    performSearch() {
-      const searchCriteria = {
-        query: this.searchQuery,
-        cuisine: this.selectedCuisine,
-        diet: this.selectedDiet,
-        intolerance: this.selectedIntolerance
-      };
-      
-      // Simulate search based on mock function
-      const { status, response } =  mockSearchRecipe(searchCriteria);
-
-      if (status === 200) {
-        this.filteredRecipes = response.recipes; // Assuming mock response structure
-      } else {
-        this.filteredRecipes = []; // Clear previous results on error
-        console.error("Error fetching recipes:", response.message);
-      }
-
+    search() {
+      this.$router.push({ name: 'results', query: { search: this.searchQuery, cuisine: this.selectedCuisine, diet: this.selectedDiet, intolerance: this.selectedIntolerance } });
     },
   }
 };
 </script>
 
 <style scoped>
-/* Add scoped styles here */
+.last-search-container {
+  text-align: center;
+}
 </style>

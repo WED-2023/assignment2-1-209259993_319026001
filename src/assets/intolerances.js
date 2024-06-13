@@ -1,17 +1,17 @@
 export default [
    
-    "dairy",
-    "egg", 
-    "gluten", 
-    "grain", 
-    "peanut",
-    "seafood",
-    "sesame", 
-    "shellfish", 
-    "soy", 
-    "sulfite", 
-    "tree nut", 
-    "wheat"
+    "Dairy",
+    "Egg", 
+    "Gluten", 
+    "Grain", 
+    "Peanut",
+    "Seafood",
+    "Sesame", 
+    "Shellfish", 
+    "Soy", 
+    "Sulfite", 
+    "Tree nut", 
+    "Wheat"
 ];
 
       
