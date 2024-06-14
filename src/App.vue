@@ -27,7 +27,7 @@
       <transition name="modal-fade">
         <div v-if="isModalVisible" class="recipe-modal">
         <NewRecipeModal />
-        <div class="modal-close-button"><b-button block @click="closeModal">Close Me</b-button></div>
+        <div class="modal-close-button"><b-button variant="danger" @click="closeModal">Close Form</b-button></div>
         </div>
       </transition>
       <router-view v-if="!isModalVisible" />
@@ -133,10 +133,13 @@ export default {
   padding: 5px 10px;
   cursor: pointer;
   margin-left: 10px;
+  border: 1px solid hsl(247, 51%, 10%);
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .logout-button:hover {
-  background-color: #35427a;
+  background-color: hsl(229, 39%, 34%);
 }
 
 /* placing register/login section on the right side of page */
@@ -182,7 +185,7 @@ export default {
 
 /* padding content so top of page won't be covered by nav bar */
 .content {
-  padding-top:  80px; 
+  padding-top: 80px; 
 }
 
 /* For Webkit (Chrome &Safari) */
@@ -211,9 +214,14 @@ export default {
   opacity: 0;
 } 
 
+.recipe-modal {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
 .modal-close-button {
-  width: 40%;
-  position: absolute;
-  left: 30%;
+  margin-top: 10px;
 }
 </style>

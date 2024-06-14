@@ -229,14 +229,14 @@ export default {
 .fav-icon {
   position: absolute;
   top: 10px; 
-  right: 15px; 
+  right: 5px; 
   width: 35px; 
   height: 35px; 
   z-index: 10; 
 }
 
 .viewed-icon {
-  right: 55px;
+  right: 40px;
   position: absolute;
   top: 12px; 
   width: 30px; 

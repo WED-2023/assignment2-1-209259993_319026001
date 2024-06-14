@@ -5,7 +5,7 @@
       <template #left-column>
   <!-- Search Box -->
   <div class="search-box">
-    <input type="text" v-model="searchQuery" placeholder="Search for recipes" class="form-control" />
+    <div class="searchbar"><input type="text" v-model="searchQuery" placeholder="Search for recipes" class="form-control" /></div>
     
     <label for="recipeCount">Number of recipes to display:</label>
     <select id="recipeCount" v-model="recipeCount" class="form-control">
@@ -97,5 +97,9 @@ export default {
 <style scoped>
 .last-search-container {
   text-align: center;
+}
+
+.searchbar {
+  margin-bottom: 20px;
 }
 </style>
