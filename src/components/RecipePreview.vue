@@ -1,13 +1,10 @@
 <template>
-  <router-link
-    :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
-    class="recipe-preview"
-    @click.native="markAsViewed(recipe.id)" 
-  >
+  <div class="recipe-preview">
     <div class="recipe-body">
-      <img v-if="image_load" :src="recipe.image" class="recipe-image" />
+      <router-link :to="{ name: 'recipe', params: { recipeId: recipe.id } }" @click.native="markAsViewed(recipe.id)" ><img :src="recipe.image" class="recipe-image" />
+      </router-link> 
       <!-- if favorited, show full icon. else, show to favorite icon -->
-      <button class="fav-button" @click="addToFav(recipe.id); $event.stopPropagation()">
+      <button class="fav-button" @click="handleFavClick(recipe.id, $event)">
         <img v-show="!fav" src="@/assets/icons/to-fav.png" class="fav-icon" alt="Favorite" />
         <img v-show="fav" src="@/assets/icons/faved.png" class="fav-icon" alt="Favorited" />
       </button>
@@ -32,7 +29,7 @@
         </li>
       </ul>
     </div>
-  </router-link>
+  </div>
 </template>
 
 <script>
@@ -40,9 +37,6 @@
 import { mockAddFavorite, mockIsInFav, mockIsViewed, mockViewRecipe } from '../services/user.js'; // Import the mock function
 export default {
   mounted() {
-    this.axios.get(this.recipe.image).then((i) => {
-      this.image_load = true;
-    });
     // variables to save status of favorite adding and viewing of recipe by user
     this.fav = this.isFav(this.recipe.id);
     this.viewed = this.isViewed(this.recipe.id);
@@ -57,6 +51,11 @@ export default {
     isViewed(recipeId) {
       const response = mockIsViewed(recipeId);
       return response.response.data.success;
+    },
+    handleFavClick(recipeId, event) {
+      // Handle click on favorite button
+      this.addToFav(recipeId);
+      event.stopPropagation(); // Stop event propagation
     },
     // method to add recipe to user's favorite recipes
     addToFav(recipeId) {
@@ -83,7 +82,6 @@ export default {
   data() {
     return {
       // return variables
-      image_load: true,
       viewed: false,
       fav: false
     };
