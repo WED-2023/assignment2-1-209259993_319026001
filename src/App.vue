@@ -18,14 +18,19 @@
           <b-dropdown-item class="dropdown-item-custom">My Recipes</b-dropdown-item>
           <b-dropdown-item class="dropdown-item-custom">Family Recipes</b-dropdown-item>
         </b-nav-item-dropdown>
-        <!-- modify page name to new form -->
-        <router-link class="nava-link" :to="{ name: 'new-recipe' }">New Recipe</router-link>
+        <button class="new-recipe-button" @click="showModal">New Recipe</button>
         <button class="logout-button" @click="Logout">Logout</button>
       </div>
       </span>
     </div>
     <div class="content">
-      <router-view />
+      <transition name="modal-fade">
+        <div v-if="isModalVisible" class="recipe-modal">
+        <NewRecipeModal />
+        <div class="modal-close-button"><b-button block @click="closeModal">Close Me</b-button></div>
+        </div>
+      </transition>
+      <router-view v-if="!isModalVisible" />
     </div>
   </div>
 </template>
@@ -34,8 +39,17 @@
 
 
 <script>
+import NewRecipeModal from './components/NewRecipeModal.vue';
 export default {
   name: "App",
+  components: {
+    NewRecipeModal,
+  },
+  data() {
+    return {
+      isModalVisible: false,
+    };
+  },
   methods: {
     Logout() {
       this.$root.store.logout();
@@ -44,6 +58,12 @@ export default {
       this.$router.push("/").catch(() => {
         this.$forceUpdate();
       });
+    },
+    showModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
     }
   }
 };
@@ -90,6 +110,18 @@ export default {
 }
 
 .nava-link:hover {
+  text-decoration: underline;
+}
+
+/* button for adding new recipe */
+.new-recipe-button {
+  color: white;
+  font-weight: bold;
+  background-color: #2c3e50;
+  border: none;
+}
+
+.new-recipe-button:hover {
   text-decoration: underline;
 }
 
@@ -169,5 +201,19 @@ export default {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #2c3e50; /* color of the scrollbar thumb on hover */
+}
+
+.modal-fade-enter-active, .modal-fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.modal-fade-enter, .modal-fade-leave-to /* .modal-fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+} 
+
+.modal-close-button {
+  width: 40%;
+  position: absolute;
+  left: 30%;
 }
 </style>

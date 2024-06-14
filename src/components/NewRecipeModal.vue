@@ -6,15 +6,15 @@
           <b-form-input id="title-input" v-model="form.title" required></b-form-input>
         </b-form-group>
   
-        <b-form-group label="Image URL" label-for="image-input">
+        <b-form-group label="Image (URL)" label-for="image-input">
           <b-form-input id="image-input" v-model="form.image" required></b-form-input>
         </b-form-group>
   
-        <b-form-group label="Ready in (minutes)" label-for="readyInMinutes-input">
+        <b-form-group label="Make Time (In minutes)" label-for="readyInMinutes-input">
           <b-form-input id="readyInMinutes-input" type="number" v-model="form.readyInMinutes" required></b-form-input>
         </b-form-group>
   
-        <b-form-group label="Servings" label-for="servings-input">
+        <b-form-group label="Number of Servings" label-for="servings-input">
           <b-form-input id="servings-input" type="number" v-model="form.servings" required></b-form-input>
         </b-form-group>
   
@@ -40,6 +40,7 @@
           <b-form-checkbox v-model="form.vegan">Vegan</b-form-checkbox>
           <b-form-checkbox v-model="form.glutenFree">Gluten Free</b-form-checkbox>
         </b-form-group>
+
   
         <b-button type="submit" variant="primary">Create Recipe</b-button>
       </form>
@@ -72,8 +73,8 @@
           image: '',
           readyInMinutes: '',
           servings: '',
-          ingredients: [''], // Reset to one empty ingredient
-          instructions: [''], // Reset to one empty instruction
+          ingredients: [''], 
+          instructions: [''],
           vegetarian: false,
           vegan: false,
           glutenFree: false
@@ -100,7 +101,11 @@
   </script>
   
   <style scoped>
+#recipeModal {
+  background-color: #ffffff;
+}
 .custom-modal-content {
+  background-color: #ffffff;
   max-width: 40%; 
   margin: 0 auto; 
   padding: 10px;
