@@ -14,9 +14,9 @@
         <div class="right-align">
         Welcome {{ $root.store.username }}:
         <b-nav-item-dropdown id="my-nav-dropdown" text="Personal" toggle-class="nav-link-custom" right>
-          <b-dropdown-item class="dropdown-item-custom">Favorites</b-dropdown-item>
-          <b-dropdown-item class="dropdown-item-custom">My Recipes</b-dropdown-item>
-          <b-dropdown-item class="dropdown-item-custom">Family Recipes</b-dropdown-item>
+        <router-link to="/favorites" tag="b-dropdown-item" class="dropdown-item-custom">Favorites</router-link>
+        <router-link to="/my-recipes" tag="b-dropdown-item" class="dropdown-item-custom">My Recipes</router-link>
+        <router-link to="/family-recipes" tag="b-dropdown-item" class="dropdown-item-custom">Family Recipes</router-link>
         </b-nav-item-dropdown>
         <button class="new-recipe-button" @click="showModal">New Recipe</button>
         <button class="logout-button" @click="Logout">Logout</button>

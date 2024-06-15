@@ -13,95 +13,38 @@
     </b-row>
   </b-container>
 </template>
-
-<script>
-import RecipePreview from "./RecipePreview.vue";
-import { mockGetRecipesPreview } from "../services/recipes.js";
-export default {
-  name: "RecipePreviewList",
-  components: {
-    RecipePreview
-  },
-  props: {
-    title: {
-      type: String,
-      required: true
-    }
-  },
-  data() {
-    return {
-      recipes: []
-    };
-  },
-  mounted() {
-    this.updateRecipes();
-  },
-  methods: {
-    async updateRecipes() {
-      try {
-        // const response = await this.axios.get(
-        //   this.$root.store.server_domain + "/recipes/random",
-        // );
-
-        const amountToFetch = 3; // Set this to how many recipes you want to fetch
-        const response = mockGetRecipesPreview(amountToFetch);
-
-
-        console.log(response);
-        const recipes = response.data.recipes;
-        console.log(recipes);
-        this.recipes = [];
-        this.recipes.push(...recipes);
-      } catch (error) {
-        console.log(error);
-      }
+  
+  <script>
+  import RecipePreview from "./RecipePreview.vue";
+  
+  export default {
+    name: "RecipePreviewList",
+    components: {
+      RecipePreview
     },
-    // function to get the last viewed recipes of user, using mock function of get receipes preview
-    async lastViewedRecipes() {
-      try {
-        // const response = await this.axios.get(
-        //   this.$root.store.server_domain + "/recipes/random",
-        // );
-
-        const amountToFetch = 3; // Set this to how many recipes you want to fetch
-        const response = mockGetRecipesPreview(amountToFetch);
-        console.log(response);
-        const recipes = response.data.recipes;
-        console.log(recipes);
-        this.recipes = [];
-        this.recipes.push(...recipes);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async lastSearchRecipes(amountToFetch) {
-      try {
-        // const response = await this.axios.get(
-        //   this.$root.store.server_domain + "/recipes/random",
-        // );
-
-        const response = mockGetRecipesPreview(amountToFetch);
-        console.log(response);
-        const recipes = response.data.recipes;
-        console.log(recipes);
-        this.recipes = [];
-        this.recipes.push(...recipes);
-      } catch (error) {
-        console.log(error);
+    props: {
+      title: {
+        type: String,
+        required: true
+      },
+      recipes: {
+        type: Array,
+        required: true,
+        default: () => []
       }
     }
+  };
+  </script>
+  
+  <style lang="scss" scoped>
+  .container {
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
   }
-};
-</script>
-
-<style lang="scss" scoped>
-.container {
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-}
-
-h3 {
-  text-align: center;
-}
-</style>
+  
+  h3 {
+    text-align: center;
+  }
+  </style>
+  

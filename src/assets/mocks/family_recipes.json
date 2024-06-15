@@ -1,0 +1,137 @@
+{
+    "recipes": [
+      {
+        "id": 1,
+        "image": "https://www.allrecipes.com/thmb/oIBbjuG9rjXDmr5IdFPLM97DOhs=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/257499-ghormeh-sabzi-persian-herb-stew-DDMFS-beauty-4x3-BG-2923-0a3327d626ca4b848bd1d1ebd7ca331d.jpg",
+        "title": "Ghormeh Sabzi",
+        "readyInMinutes": 180,
+        "owner": "Grandmother Rachel",
+        "whenToMake": "Shabbat",
+        "summary": "Horshat sabzi or gourmet sabzi is a vegetable and meat stew that is considered the flagship dish in Iranian cuisine. A sour dish whose ingredients are fresh and dried green vegetables that are cooked together with beef and red beans in a long cooking process. The dish is usually eaten on special occasions and on Shabbat, and it is usually served with white rice.",
+        "ingredients": [
+            "2 bunches of parsley",
+            "2 bunches of dill",
+            "2 bunches of coriander",
+            "A quarter of a bunch of mint",
+            "2 large onions",
+            "2 leeks",
+            "2 tablespoons of tomato paste",
+            "Olive oil",
+            "1 and a half kg of beef",
+            "3 cups of water",
+            "1 and a half cups of red beans",
+            "4 Persian lemons",
+            "Salt to taste",
+            "2 teaspoons of turmeric",
+            "1 teaspoon cumin",
+            "2-3 tablespoons of pomegranate concentrate"
+          ],
+          "instructions": [
+            {
+              "index": 1,
+              "instruction": "Wash the herbs and dry thoroughly, separate the leaves and chop well."
+            },
+            {
+              "index": 2,
+              "instruction": "Cut one onion thinly and fry in a little oil in a wide pan, add chopped leek."
+            },
+            {
+              "index": 3,
+              "instruction": "Add the tomato paste and continue frying."
+            },
+            {
+              "index": 4,
+              "instruction": "When the onion and leek are fried, add the herbs, fry for a few more minutes and remove from the heat. Set aside."
+            },
+            {
+              "index": 5,
+              "instruction": "Chop the second onion and fry it in olive oil in a separate pot. Cut the meat into cubes approximately 4 cm by 4 cm. Add the meat cubes to the chopped onion and fry to 'close' the meat cubes."
+            },
+            {
+              "index": 6,
+              "instruction": "Add the water and the beans and cook for about two hours until the meat and beans are soft and cooked."
+            },
+            {
+              "index": 7,
+              "instruction": "Add the herbs and mix. Add the lemon powder to the stew with salt, turmeric, cumin and pomegranate concentrate."
+            },
+            {
+              "index": 8,
+              "instruction": "Cook for another hour on low heat."
+            }
+          ]
+      },
+      {
+        "id": 2,
+        "image": "https://www.allrecipes.com/thmb/nWlr0GW8xRLtwbpbtElOmSDhpnU=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/7127661-sekanjabin-iranian-mint-vinegar-syrup-Diana71-4x3-1-4a9e9ef37e9a441abd64c6c9faaa62eb.jpg",
+        "title": "Sekanjabin",
+        "readyInMinutes": 20,
+        "owner": "Grandfather Navi",
+        "whenToMake": "Hot summer days",
+        "summary": "Sekanjabin is a traditional Persian beverage. Great for outdoor events since you can make it weeks ahead of time and dilute at the time of serving. Persians usually drink it on the last day of Nowruz, which is the Persian new year.",
+        "ingredients": [
+            "8 cups orange blossom honey",
+            "5 cups water",
+            "2 cups white wine vinegar",
+            "12 large sprigs fresh mint"
+          ],
+          "instructions": [
+            {
+              "index": 1,
+              "instruction": "Stir honey and water together in a pot; bring to a boil and stir constantly until honey dissolves."
+            },
+            {
+              "index": 2,
+              "instruction": "Add vinegar, reduce heat to low, and simmer until syrup flavors combine, about 20 minutes."
+            },
+            {
+              "index": 3,
+              "instruction": "Submerge mint in hot syrup and cool to room temperature."
+            },
+            {
+              "index": 4,
+              "instruction": "Remove and discard mint. Chill syrup in the refrigerator."
+            }
+          ]
+      },
+      {
+        "id": 3,
+        "image": "https://images.prismic.io/jewishfoodsociety/80bdec09-850a-4227-a698-0c853a752738_Shifte%2BSoup_0148.jpeg?auto=compress,format&rect=44,0,1412,971&w=1600&h=1100",
+        "title": "Gondi",
+        "readyInMinutes": 120,
+        "owner": "Grandmother Rachel",
+        "whenToMake": "Passover Seder",
+        "summary": "Gondi is a Jewish-Persian dish of round and airy dumplings made from ground chicken meat, hummus and flour made from dry hummus. The gondi is served with the broth in which it was cooked, usually on a bed of white rice. The color of the gundi is yellow, due to the use of the common spice in Persia, turmeric or saffron.",
+        "ingredients": [
+            "A kilo of ground chicken breast",
+            "4 peeled medium onions",
+            "3/4 cup ground roasted chickpeas",
+            "A little oil",
+            "Salt and pepper",
+            "A pinch of ground cumin",
+            "A pinch of ground coriander",
+            "A pinch of turmeric",
+            "A pinch of cardamom",
+            "2 tablespoons of chicken soup powder"
+          ],
+          "instructions": [
+            {
+              "index": 1,
+              "instruction": "Mix all the meatball ingredients until you get a uniform paste (and not too soft). Put in the fridge for half an hour."
+            },
+            {
+              "index": 2,
+              "instruction": "Boil water in a pot and add the spices (turmeric, soup powder and cardamom)."
+            },
+            {
+              "index": 3,
+              "instruction": "Make round patties the size of a tennis ball from the meat mixture, and throw them into the soup."
+            },
+            {
+              "index": 4,
+              "instruction": "Let the meatballs cook for about half an hour."
+            }
+          ]
+      }
+    ]
+} 

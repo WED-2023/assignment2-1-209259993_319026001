@@ -2,6 +2,9 @@
 import recipe_full_view from "../assets/mocks/recipe_full_view.json";
 import recipe_preview from "../assets/mocks/recipe_preview.json";
 
+/*
+many functions look the same because it's a reminder to implement them
+*/
 
 export function mockGetRecipesPreview(amount = 1) {
   let recipes = [];

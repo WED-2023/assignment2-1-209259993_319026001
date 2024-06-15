@@ -14,7 +14,7 @@
               </select>
           </div>
           <!-- show results -->
-      <RecipeResultList :recipes="recipes" />
+      <RecipePreviewList :recipes="recipes" />
     </div>
     <!-- if no results come back, show message -->
     <div v-else>
@@ -25,11 +25,11 @@
 </template>
 
 <script>
-import RecipeResultList from "../components/RecipeResultList.vue";
+import RecipePreviewList from "../components/RecipePreviewList.vue";
 import { mockSearchDatabase } from "../services/recipes.js";
 export default {
   components: {
-    RecipeResultList
+    RecipePreviewList
 },
   data() {
     return {

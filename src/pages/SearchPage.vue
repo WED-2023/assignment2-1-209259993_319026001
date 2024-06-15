@@ -53,7 +53,7 @@
         <!-- if user is logged in -->
         <div v-if="$root.store.username" class="last-search-container">
           <h3> Hey {{ $root.store.username }},</h3>
-          <RecipePreviewList ref="recipeLastViewedList" title="Here is your last search:" class="RandomRecipes center" />
+          <RecipePreviewList :recipes="recipes" title="Here is your last search:" class="RandomRecipes center" />
         </div>
       </template>
     </TwoColumnsLayout>
@@ -66,6 +66,7 @@ import TwoColumnsLayout from "../components/TwoColumnsLayout.vue";
 import cuisine from "../assets/cuisine";
 import intolerances from "../assets/intolerances";
 import diets from "../assets/diets";
+import { mockGetRecipesPreview } from "../services/recipes.js";
 
 export default {
   components: {
@@ -74,9 +75,8 @@ export default {
   },
   data() {
     return {
+      recipes: [],
       recipeCount: 5, // Default number of recipes to display
-      lastSearchRecipes: [], // Store for last search recipes
-      filteredRecipes: [], // Store for current search results
       searchQuery: "", // User input for recipe search
       selectedCuisine: "No Filter", // as requested in assignment
       selectedDiet: "No Filter",
@@ -86,10 +86,29 @@ export default {
       cuisines: cuisine // Import from countries.js file
     };
   },
+  async created() {
+    await this.lastSearchRecipes();
+  },
   methods: {
     search() {
       this.$router.push({ name: 'results', query: { search: this.searchQuery, cuisine: this.selectedCuisine, diet: this.selectedDiet, intolerance: this.selectedIntolerance } });
     },
+    async lastSearchRecipes(recipeCount) {
+      try {
+        // const response = await this.axios.get(
+        //   this.$root.store.server_domain + "/recipes/random",
+        // );
+
+        const response = mockGetRecipesPreview(this.recipeCount);
+        console.log(response);
+        const recipes = response.data.recipes;
+        console.log(recipes);
+        this.recipes = [];
+        this.recipes.push(...recipes);
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
 };
 </script>

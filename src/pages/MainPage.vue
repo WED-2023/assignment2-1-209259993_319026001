@@ -17,7 +17,7 @@
     <div>
     <TwoColumnsLayout>
       <template #left-column>
-        <RecipePreviewList ref="recipePreviewList" title="Explore these recipes" class="RandomRecipes center" />
+        <RecipePreviewList :recipes="randomRecipes" title="Explore these recipes" class="RandomRecipes center" />
         <div class="button-container">
           <b-button variant="dark" class="button-element" @click="fetchNewRecipes">More</b-button>
         </div>
@@ -29,7 +29,7 @@
         </div>
         <!-- if user is logged in -->
         <div v-else>
-          <RecipePreviewList ref="recipeLastViewedList" title="Last Viewed Recipes" class="RandomRecipes center" />
+          <RecipePreviewList :recipes="lastRecipes" title="Last Viewed Recipes" class="RandomRecipes center" />
         </div>
       </template>
     </TwoColumnsLayout>
@@ -48,18 +48,59 @@
 import RecipePreviewList from "../components/RecipePreviewList";
 import TwoColumnsLayout from '../components/TwoColumnsLayout';
 import Login from '../pages/LoginPage';
+import { mockGetRecipesPreview } from "../services/recipes.js";
 export default {
   components: {
     RecipePreviewList,
     TwoColumnsLayout,
     Login
   },
+  data() {
+    return {
+      randomRecipes: [],
+      lastRecipes: []
+    };
+  },
+  async created() {
+    await this.fetchNewRecipes();
+    await this.getLastViewedRecipes();
+},
   methods: {
-    fetchNewRecipes() {
-      this.$refs.recipePreviewList.updateRecipes();
+    async fetchNewRecipes() {
+      try {
+        // const response = await this.axios.get(
+        //   this.$root.store.server_domain + "/recipes/random",
+        // );
+
+        const amountToFetch = 3; // Set this to how many recipes you want to fetch
+        const response = mockGetRecipesPreview(amountToFetch);
+
+
+        console.log(response);
+        const recipes = response.data.recipes;
+        console.log(recipes);
+        this.randomRecipes = [];
+        this.randomRecipes.push(...recipes);
+      } catch (error) {
+        console.log(error);
+      }
     },
-    getLastViewedRecipes() {
-      this.$refs.recipeLastViewedList.lastViewedRecipes();
+    async getLastViewedRecipes() {
+      try {
+        // const response = await this.axios.get(
+        //   this.$root.store.server_domain + "/recipes/random",
+        // );
+
+        const amountToFetch = 3; // Set this to how many recipes you want to fetch
+        const response = mockGetRecipesPreview(amountToFetch);
+        console.log(response);
+        const recipes = response.data.recipes;
+        console.log(recipes);
+        this.lastRecipes = [];
+        this.lastRecipes.push(...recipes);
+      } catch (error) {
+        console.log(error);
+      }
     }
   } 
 };

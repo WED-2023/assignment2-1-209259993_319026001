@@ -1,6 +1,12 @@
 // src/services/user.js
 import recipe_full_view from "../assets/mocks/recipe_full_view.json";
 import recipe_preview from "../assets/mocks/recipe_preview.json";
+import family_recipes from "../assets/mocks/family_recipes.json";
+
+
+/*
+many functions look the same because it's a reminder to implement them
+*/
 
 
   export function mockAddFavorite(recipeId) {
@@ -67,20 +73,22 @@ export function mockIsViewed(recipeId) {
   }
 }
 
-// src/services/user.js
+// mock function to get favorites of user
+export function mockGetFavorites() {
+  // just return existing recipes because it's a mock
+  return { data: { recipes: recipe_preview.recipes }, status: 200 } ;
+}
 
+// mock function to get recipes of user
+export function mockGetUserRecipes() {
+  // just return existing recipes because it's a mock
+  return { data: { recipes: recipe_preview.recipes }, status: 200 } ;
+}
 
-export function mockSearchRecipe(searchCriteria) {
-  // Simulate asynchronous behavior with setTimeout
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      // Simulate successful search
-      resolve({ status: 200, response: { recipes: recipe_preview.recipes } });
-      
-      // Simulate error
-      // reject({ status: 500, response: { message: "Internal Server Error" } });
-    }, 1000); // Simulating 1 second delay
-  });
+// mock function to get family of user
+export function mockFamilyRecipes() {
+  // just return existing recipes because it's a mock
+  return { data: { recipes: family_recipes.recipes }, status: 200 } ;
 }
 
 
