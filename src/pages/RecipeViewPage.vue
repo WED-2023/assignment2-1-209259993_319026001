@@ -21,7 +21,12 @@
               </div>
               <div v-if="recipe.glutenFree">
                 <img src="@/assets/icons/gluten-free.png" alt="Gluten Free" class="icon" />
-            </div>
+              </div>
+              <!-- if favorited, show full icon. else, show to favorite icon -->
+              <button class="fav-button" @click="addToFav(recipe.id)">
+                <img v-show="!fav" src="@/assets/icons/to-fav.png" class="fav-icon" alt="Favorite" />
+                <img v-show="fav" src="@/assets/icons/faved.png" class="fav-icon" alt="Favorited" />
+              </button>
             </div>
             </div>
             Ingredients:
@@ -55,11 +60,35 @@
 
 <script>
 import { mockGetRecipeFullDetails } from "../services/recipes.js";
+import { mockIsInFav, mockAddFavorite } from '../services/user.js'; // Import the mock function
 export default {
+  mounted() {
+    // variables to save status of favorite adding and viewing of recipe by user
+    this.fav = this.isFav(this.recipe.id);
+  },
   data() {
     return {
-      recipe: null
+      recipe: null,
+      fav: false
     };
+  },
+  methods: {
+    // method to check if recipe is favorited by user
+    isFav(recipeId) {
+      const response = mockIsInFav(recipeId);
+      return response.response.data.success;
+    },
+        // method to add recipe to user's favorite recipes
+    addToFav(recipeId) {
+      console.log("addToFav called");
+      const response = mockAddFavorite(recipeId);
+      if (response.response.data.success === true) {
+        this.fav = true;
+        console.log("successfully added to favorites");
+      } else {
+        console.error("Failed to add to favorites:", response.response.data.message);
+      }
+    }
   },
   async created() {
     try {
@@ -142,11 +171,18 @@ export default {
   width: 50%;
 }
 
-.icon {
-  width: 30px;
-  height: 30px;
+.icon, .fav-icon {
+  width: 35px;
+  height: 35px;
   margin-right: 10px;
   margin-top: 10px;
+}
+
+.fav-button {
+  border: none;
+  background: none;
+  padding: 0; 
+  cursor: pointer;
 }
 
 .icons-container {

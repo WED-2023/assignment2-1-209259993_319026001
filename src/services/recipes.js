@@ -20,4 +20,8 @@ export function mockSearchDatabase(search, cuisine, diet, intolerance) {
   // just return existing recipes because it's a mock
   return { data: { recipes: recipe_preview.recipes }, status: 200 } ;
 }
+
+export function mockAddNewRecipe(title, image, readyInMinutes, servings, ingredients, instructions, vegetarian, vegan, glutenFree) {
+  return { status: 200, response: { data: { message: "The Recipe was created successfully.", success: true}} };
+}
   

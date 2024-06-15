@@ -241,4 +241,8 @@ export default {
   height: 30px; 
 }
 
+.recipe-title {
+  font-weight: bold;
+}
+
 </style>
