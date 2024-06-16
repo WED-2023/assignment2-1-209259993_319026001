@@ -26,8 +26,7 @@
     <div class="content">
       <transition name="modal-fade">
         <div v-if="isModalVisible" class="recipe-modal">
-        <NewRecipeModal />
-        <div class="modal-close-button"><b-button variant="danger" @click="closeModal">Close Form</b-button></div>
+        <NewRecipeModal :close="closeModal" />
         </div>
       </transition>
       <router-view v-if="!isModalVisible" />
@@ -61,9 +60,11 @@ export default {
     },
     showModal() {
       this.isModalVisible = true;
+      console.log("modal opened")
     },
     closeModal() {
       this.isModalVisible = false;
+      console.log("modal closed")
     }
   }
 };
