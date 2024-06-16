@@ -133,10 +133,9 @@ export default {
 <style scoped>
 .recipe-preview {
   display: inline-block;
-  width: 100%;
-  height: 100%;
   position: relative;
   margin: 10px 10px;
+  width: 400px;
 }
 .recipe-preview > .recipe-body {
   width: 100%;
@@ -159,6 +158,7 @@ export default {
 
 .recipe-body {
   overflow: hidden;
+  width: 100%;
 }
 
 .recipe-preview .recipe-footer {
@@ -173,7 +173,6 @@ export default {
   font-size: 12pt;
   text-align: left;
   white-space: nowrap;
-  overflow: hidden;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
 }

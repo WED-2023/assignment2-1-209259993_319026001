@@ -27,6 +27,7 @@
     flex: 1;
     padding: 10px;
     box-sizing: border-box;
+    width: 50%;
   }
   
   .column:first-child {
