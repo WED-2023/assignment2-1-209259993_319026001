@@ -29,7 +29,7 @@
         </div>
         <!-- if user is logged in -->
         <div v-else>
-          <RecipePreviewList :recipes="lastRecipes" title="Last Viewed Recipes" class="RandomRecipes center" />
+          <RecipePreviewList :recipes="lastRecipes" title="Last viewed recipes" class="RandomRecipes center" />
         </div>
       </template>
     </TwoColumnsLayout>

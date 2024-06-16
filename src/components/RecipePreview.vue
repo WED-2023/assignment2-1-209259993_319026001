@@ -53,9 +53,15 @@ export default {
       return response.response.data.success;
     },
     handleFavClick(recipeId, event) {
-      // Handle click on favorite button
-      this.addToFav(recipeId);
       event.stopPropagation(); // Stop event propagation
+
+      if (!this.$root.store.username) {
+        // User is not logged in
+        alert('You must be logged in to favorite a recipe.');
+      } else {
+        // User is logged in, proceed to add to favorites
+        this.addToFav(recipeId);
+      }
     },
     // method to add recipe to user's favorite recipes
     addToFav(recipeId) {
@@ -135,7 +141,12 @@ export default {
   display: inline-block;
   position: relative;
   margin: 10px 10px;
-  width: 400px;
+  width: 450px;  
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 5px;
 }
 .recipe-preview > .recipe-body {
   width: 100%;
