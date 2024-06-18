@@ -2,8 +2,8 @@
   <b-modal id="recipeModal" title="Create New Recipe" @show="resetForm" hide-footer>
     <div class="custom-modal-content">
       <form @submit.prevent="submitForm">
-        <b-card no-body class="mb-4 border-primary">
-          <b-card-header class="bg-primary text-white">Recipe Details</b-card-header>
+        <b-card no-body class="mb-4 recipe-details-card">
+          <b-card-header class="recipe-details-header text-white">Recipe Details</b-card-header>
           <b-card-body>
             <b-form-group label="Title of Recipe" label-for="title-input">
               <b-form-input id="title-input" v-model="form.title" required></b-form-input>
@@ -29,8 +29,8 @@
           </b-card-body>
         </b-card>
 
-        <b-card no-body class="mb-4 border-secondary">
-          <b-card-header class="bg-secondary text-white">Instructions</b-card-header>
+        <b-card no-body class="mb-4 instructions-card">
+          <b-card-header class="instructions-header text-white">Instructions</b-card-header>
           <b-card-body>
             <div v-for="(instruction, index) in form.instructions" :key="index" class="mb-4">
               <b-form-group :label="'Step ' + (index + 1)" :label-for="'instruction-' + index">
@@ -48,14 +48,14 @@
                   <b-form-input v-model="ingredient.unit" :placeholder="'Unit'" required></b-form-input>
                 </b-form-group>
               </div>
-              <b-button @click="addIngredient(index)" variant="outline-primary">Add Ingredient to this Step</b-button>
+              <b-button @click="addIngredient(index)" variant="secondary">Add Ingredient to this Step</b-button>
             </div>
-            <b-button @click="addInstruction" variant="outline-primary">Add Step</b-button>
+            <b-button @click="addInstruction" variant="secondary">Add Step</b-button>
           </b-card-body>
         </b-card>
 
-        <b-card no-body class="mb-4 border-info">
-          <b-card-header class="bg-info text-white">Dietary Options</b-card-header>
+        <b-card no-body class="mb-4 dietary-options-card">
+          <b-card-header class="dietary-options-header text-white">Dietary Options</b-card-header>
           <b-card-body>
             <div class="form-check mb-2">
               <input type="checkbox" id="vegetarian" class="form-check-input" v-model="form.vegetarian">
@@ -73,7 +73,7 @@
         </b-card>
 
         <div class="d-flex justify-content-end">
-          <b-button type="submit" variant="primary">Create Recipe</b-button>
+          <b-button type="submit" variant="primary" class="create-button">Create Recipe</b-button>
           <b-button @click="closeModal" variant="secondary" class="ml-2">Close</b-button>
         </div>
       </form>
@@ -81,6 +81,8 @@
     </div>
   </b-modal>
 </template>
+
+
 
 <script>
 import { mockAddNewRecipe } from "../services/recipes.js";
@@ -201,7 +203,26 @@ export default {
   border-width: 2px;
 }
 
+.recipe-details-card, .instructions-card, .dietary-options-card {
+  border-color: #2c3e50; /* Primary color */
+}
+.recipe-details-header, .instructions-header, .dietary-options-header {
+  background-color: #2c3e50; /* Primary color */
+}
+
 .b-button {
   margin-top: 10px;
 }
+
+.create-button {
+  background-color: #2c3e50;
+  border-color: #2c3e50;
+}
+
+.create-button:hover {
+  background-color: #1c252e;
+  border-color: #1c252e;
+}
+
 </style>
+

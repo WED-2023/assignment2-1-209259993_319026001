@@ -160,6 +160,11 @@ button {
     color: white;
     border: none;
     cursor: pointer;
+    display: block;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    text-decoration: none;
 }
 
 button:hover {

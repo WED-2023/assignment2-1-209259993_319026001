@@ -1,72 +1,71 @@
 <template>
   <div class="container">
     <div v-if="recipe">
-      <div class="recipe-header mt-3 mb-4">
-        <h1>{{ recipe.title }}</h1>
-        <img :src="recipe.image" class="center" />
+      <div class="recipe-header">
+        <h1 class="recipe-title">{{ recipe.title }}</h1>
+        <img :src="recipe.image" class="recipe-image" />
       </div>
-      <div class="recipe-body">
-        <div class="wrapper">
-          <div class="wrapped">
-            <div class="mb-3">
-              <div>Ready in {{ recipe.readyInMinutes }} minutes</div>
-              <div>Likes: {{ recipe.aggregateLikes }} likes</div>
-              <div>Servings: {{ recipe.servings }} servings</div>
-              <div class="icons-container">
-              <div v-if="recipe.vegetarian">
-                <img src="@/assets/icons/no-meat.png" alt="Vegetarian" class="icon" />
-              </div>
-              <div v-if="recipe.vegan">
-                <img src="@/assets/icons/vegan.png" alt="Vegan" class="icon" />
-              </div>
-              <div v-if="recipe.glutenFree">
-                <img src="@/assets/icons/gluten-free.png" alt="Gluten Free" class="icon" />
-              </div>
-              <!-- if favorited, show full icon. else, show to favorite icon -->
-              <button class="fav-button" @click="addToFav(recipe.id)">
-                <img v-show="!fav" src="@/assets/icons/to-fav.png" class="fav-icon" alt="Favorite" />
-                <img v-show="fav" src="@/assets/icons/faved.png" class="fav-icon" alt="Favorited" />
-              </button>
-            </div>
-            </div>
-            Ingredients:
-            <ul>
-              <li
-                v-for="(r, index) in recipe.extendedIngredients"
-                :key="index + '_' + r.id"
-              >
-                {{ r.original }}
-              </li>
-            </ul>
+      <div class="recipe-details">
+        <div class="details">
+          <div class="detail-item">
+            <span class="detail-label">Ready in:</span> {{ recipe.readyInMinutes }} minutes
           </div>
-          <div class="wrapped">
-            Instructions:
-            <ol>
-              <li v-for="s in recipe.instructions" :key="s.number">
-                {{ s.step }}
-              </li>
-            </ol>
-            <router-link :to="{ name: 'make-recipe', params: { recipeId: recipe.id } }">
+          <div class="detail-item">
+            <span class="detail-label">Likes:</span> {{ recipe.aggregateLikes }} likes
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Servings:</span> {{ recipe.servings }} servings
+          </div>
+          <div class="icons-container">
+            <div v-if="recipe.vegetarian">
+              <img src="@/assets/icons/no-meat.png" alt="Vegetarian" class="icon" />
+            </div>
+            <div v-if="recipe.vegan">
+              <img src="@/assets/icons/vegan.png" alt="Vegan" class="icon" />
+            </div>
+            <div v-if="recipe.glutenFree">
+              <img src="@/assets/icons/gluten-free.png" alt="Gluten Free" class="icon" />
+            </div>
+          </div>
+          <div class="button-container">
+            <button class="fav-button" @click="addToFav(recipe.id)">
+              {{ fav ? 'Favorited' : 'Add to Favorites' }}
+            </button>
+            <router-link 
+              :to="{ name: 'make-recipe', params: { recipeId: recipe.id } }" 
+              class="make-recipe-link"
+              @click.native="handleMakeRecipe">
               <button class="make-recipe-button">Make This Recipe</button>
             </router-link>
           </div>
         </div>
+        <div class="ingredients">
+          <h2>Ingredients</h2>
+          <ul>
+            <li v-for="(r, index) in recipe.extendedIngredients" :key="index + '_' + r.id">
+              {{ r.original }}
+            </li>
+          </ul>
+        </div>
+        <div class="instructions">
+          <h2>Instructions</h2>
+          <ol>
+            <li v-for="s in recipe.instructions" :key="s.number">
+              {{ s.step }}
+            </li>
+          </ol>
+        </div>
       </div>
-      <!-- <pre>
-      {{ $route.params }}
-      {{ recipe }}
-    </pre
-      > -->
     </div>
   </div>
 </template>
 
 <script>
 import { mockGetRecipeFullDetails } from "../services/recipes.js";
-import { mockIsInFav, mockAddFavorite } from '../services/user.js'; // Import the mock function
+import { mockIsInFav, mockAddFavorite, mockAddToMeal } from '../services/user.js';
+
 export default {
   mounted() {
-    // variables to save status of favorite adding and viewing of recipe by user
     this.fav = this.isFav(this.recipe.id);
   },
   data() {
@@ -76,45 +75,37 @@ export default {
     };
   },
   methods: {
-    // method to check if recipe is favorited by user
     isFav(recipeId) {
       const response = mockIsInFav(recipeId);
       return response.response.data.success;
     },
-        // method to add recipe to user's favorite recipes
     addToFav(recipeId) {
-      console.log("addToFav called");
       const response = mockAddFavorite(recipeId);
       if (response.response.data.success === true) {
         this.fav = true;
-        console.log("successfully added to favorites");
       } else {
         console.error("Failed to add to favorites:", response.response.data.message);
       }
+    },
+    handleMakeRecipe(event) {
+      // Perform the function logic here
+      console.log('Recipe making process started');
+      try {
+      // Navigate to the recipe page manually
+      let response = mockAddToMeal(this.recipe.id);
+      if (response.status !== 200) this.$router.replace("/NotFound");
+      console.log("Redirecting...");
+      }
+      catch (error) {
+      console.log(error);
+      }
+
     }
   },
   async created() {
     try {
-      let response;
-      // response = this.$route.params.response;
-
-      try {
-        // response = await this.axios.get(
-        //   this.$root.store.server_domain + "/recipes/" + this.$route.params.recipeId,
-        //   {
-        //     withCredentials: true
-        //   }
-        // );
-
-        response = mockGetRecipeFullDetails(this.$route.params.recipeId);
-
-        // console.log("response.status", response.status);
-        if (response.status !== 200) this.$router.replace("/NotFound");
-      } catch (error) {
-        console.log("error.response.status", error.response.status);
-        this.$router.replace("/NotFound");
-        return;
-      }
+      let response = mockGetRecipeFullDetails(this.$route.params.recipeId);
+      if (response.status !== 200) this.$router.replace("/NotFound");
 
       let {
         analyzedInstructions,
@@ -161,35 +152,86 @@ export default {
 </script>
 
 <style scoped>
-.wrapper {
+.container {
+  width: 80%;
+  margin: auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.recipe-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.recipe-title {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+.recipe-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin: 0 auto;
+}
+
+.recipe-details {
   display: flex;
-}
-.wrapped {
-  width: 50%;
-}
-.center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.icon, .fav-icon {
-  width: 35px;
-  height: 35px;
-  margin-right: 10px;
-  margin-top: 10px;
+.details {
+  flex: 1;
+  min-width: 200px;
 }
 
-.fav-button {
-  border: none;
-  background: none;
-  padding: 0; 
-  cursor: pointer;
+.detail-item {
+  font-size: 1.1em;
+  margin-bottom: 10px;
+}
+
+.detail-label {
+  font-weight: bold;
 }
 
 .icons-container {
-display: flex;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.icon {
+  width: 35px;
+  height: 35px;
+  margin-right: 10px;
+}
+
+.ingredients, .instructions {
+  flex: 2;
+  min-width: 300px;
+}
+
+h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.fav-button {
+  padding: 10px 20px;
+  background-color: #f76672;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.fav-button:hover {
+  background-color: #db666f;
 }
 
 .make-recipe-button {
@@ -202,19 +244,22 @@ display: flex;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin: 20px;
+  text-align: center;
+  text-decoration: none;
 }
 
 .make-recipe-button:hover {
   background-color: #45a049;
 }
 
-button:focus {
-  outline: none;
+.make-recipe-link {
+  text-decoration: none;
 }
 
-.container {
-  width: 80%;
-  margin: auto;
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
 }
 </style>

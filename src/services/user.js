@@ -91,6 +91,10 @@ export function mockFamilyRecipes() {
   return { data: { recipes: family_recipes.recipes }, status: 200 } ;
 }
 
+export function mockAddToMeal(recipeId) {
+  return { status: 200, response: { data: { message: "The Recipe was added to meal successfully", success: true}} };
+}
+
 
 
   
