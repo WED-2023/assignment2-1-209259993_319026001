@@ -30,22 +30,27 @@
         </b-card>
 
         <b-card no-body class="mb-4 border-secondary">
-          <b-card-header class="bg-secondary text-white">Ingredients</b-card-header>
-          <b-card-body>
-            <div v-for="(ingredient, index) in form.ingredients" :key="index" class="mb-2">
-              <b-form-input v-model="form.ingredients[index]" :placeholder="'Ingredient ' + (index + 1)" required></b-form-input>
-            </div>
-            <b-button @click="addIngredient" variant="outline-primary">Add Ingredient</b-button>
-          </b-card-body>
-        </b-card>
-
-        <b-card no-body class="mb-4 border-secondary">
           <b-card-header class="bg-secondary text-white">Instructions</b-card-header>
           <b-card-body>
-            <div v-for="(instruction, index) in form.instructions" :key="index" class="mb-2">
-              <b-form-input v-model="form.instructions[index]" :placeholder="'Step ' + (index + 1)" required></b-form-input>
+            <div v-for="(instruction, index) in form.instructions" :key="index" class="mb-4">
+              <b-form-group :label="'Step ' + (index + 1)" :label-for="'instruction-' + index">
+                <b-form-input :id="'instruction-' + index" v-model="instruction.step" required></b-form-input>
+              </b-form-group>
+
+              <div class="mb-2" v-for="(ingredient, iIndex) in instruction.ingredients" :key="'ingredient-' + index + '-' + iIndex">
+                <b-form-group :label="'Ingredient ' + (iIndex + 1)" :label-for="'ingredient-' + index + '-' + iIndex">
+                  <b-form-input v-model="ingredient.name" :placeholder="'Ingredient ' + (iIndex + 1)" required></b-form-input>
+                </b-form-group>
+                <b-form-group :label="'Amount '" :label-for="'amount-' + index + '-' + iIndex">
+                  <b-form-input v-model="ingredient.amount" type="number" :placeholder="'Amount'" required></b-form-input>
+                </b-form-group>
+                <b-form-group :label="'Unit '" :label-for="'unit-' + index + '-' + iIndex">
+                  <b-form-input v-model="ingredient.unit" :placeholder="'Unit'" required></b-form-input>
+                </b-form-group>
+              </div>
+              <b-button @click="addIngredient(index)" variant="outline-primary">Add Ingredient to this Step</b-button>
             </div>
-            <b-button @click="addInstruction" variant="outline-primary">Add Instruction</b-button>
+            <b-button @click="addInstruction" variant="outline-primary">Add Step</b-button>
           </b-card-body>
         </b-card>
 
@@ -93,8 +98,12 @@ export default {
         image: '',
         readyInMinutes: '',
         servings: '',
-        ingredients: [''],
-        instructions: [''],
+        instructions: [
+          {
+            step: '',
+            ingredients: []  // Start with no ingredients
+          }
+        ],
         vegetarian: false,
         vegan: false,
         glutenFree: false
@@ -103,41 +112,43 @@ export default {
   },
   methods: {
     resetForm() {
-      // Reset form fields when modal is shown
       this.form = {
         title: '',
         image: '',
         readyInMinutes: '',
         servings: '',
-        ingredients: [''],
-        instructions: [''],
+        instructions: [
+          {
+            step: '',
+            ingredients: []  // Start with no ingredients
+          }
+        ],
         vegetarian: false,
         vegan: false,
         glutenFree: false
       };
     },
-    addIngredient() {
-      this.form.ingredients.push('');
+    addIngredient(stepIndex) {
+      this.form.instructions[stepIndex].ingredients.push({ name: '', amount: '', unit: '' });
     },
     addInstruction() {
-      this.form.instructions.push('');
+      this.form.instructions.push({ step: '', ingredients: [] });  // Add new instruction with no ingredients
     },
     closeModal() {
       this.close();
     },
     submitForm() {
-      // Remove any empty ingredients or instructions
-      this.form.ingredients = this.form.ingredients.filter(ingredient => ingredient.trim() !== '');
-      this.form.instructions = this.form.instructions.filter(instruction => instruction.trim() !== '');
+      this.form.instructions.forEach(instruction => {
+        instruction.ingredients = instruction.ingredients.filter(ingredient => ingredient.name.trim() !== '');
+      });
+      this.form.instructions = this.form.instructions.filter(instruction => instruction.step.trim() !== '');
 
-      // Add new recipe (replace with actual API call)
       console.log('Form submitted with data:', this.form);
       const response = mockAddNewRecipe(
         this.form.title,
         this.form.image,
         this.form.readyInMinutes,
         this.form.servings,
-        this.form.ingredients,
         this.form.instructions,
         this.form.vegetarian,
         this.form.vegan,
@@ -166,6 +177,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 .custom-modal-content {
