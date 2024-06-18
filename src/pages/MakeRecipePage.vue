@@ -1,11 +1,12 @@
 <template>
     <div class="container" v-if="instructions">
         <h1>{{ recipe.title }}</h1>
-        <h4>Servings: {{  this.servings }}</h4><button @click="doubleServings">Double the Servings</button>
+        <h4>Servings: {{ servings }}</h4>
+        <button @click="doubleServings">Double the Servings</button>
         <div v-for="(step, index) in instructions.steps" :key="index" class="step">
             <div class="step-header">
                 <h2>Step {{ step.number }}</h2>
-                <input type="checkbox" v-model="step.completed" />
+                <input type="checkbox" v-model="step.completed" @change="updateCompletionStatus(step)" />
             </div>
             <p>{{ step.step }}</p>
             <div v-if="step.ingredients.length > 0">
@@ -36,6 +37,7 @@
         </div>
     </div>
 </template>
+
 
 <script>
 import { mockGetRecipeInstructions, mockGetRecipeDetailsForIngridients } from "../services/recipes.js";
@@ -70,10 +72,13 @@ export default {
                 }
 
                 this.recipe = response.data.recipe;
-                this.servings = this.recipe.servings
+                this.servings = this.recipe.servings;
                 
                 // Preprocess ingredients
                 this.preprocessIngredients();
+                
+                // Initialize step completion status
+                this.initializeStepCompletion();
             } catch (error) {
                 console.log("error:", error);
                 this.$router.replace("/NotFound");
@@ -103,9 +108,25 @@ export default {
                     });
                 });
             }
+        },
+        initializeStepCompletion() {
+        // initialize the completed property for each step
+        if (this.instructions && this.instructions.steps) {
+            this.instructions.steps.forEach(step => {
+                // retrieve completion status from local storage
+                const completed = localStorage.getItem(`step-${step.number}`);
+                this.$set(step, 'completed', completed === 'true');
+                });
+             }
+        },
+        updateCompletionStatus(step) {
+        // Save the completion status to local storage so as long as user is connected
+        // it will save the process. whenever user logs out, local storage clears itself (as defined in logout method)
+        localStorage.setItem(`step-${step.number}`, step.completed);
         }
     }
 };
+
 </script>
 
 <style lang="scss" scoped>

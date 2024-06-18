@@ -46,6 +46,9 @@
                 {{ s.step }}
               </li>
             </ol>
+            <router-link :to="{ name: 'make-recipe', params: { recipeId: recipe.id } }">
+              <button class="make-recipe-button">Make This Recipe</button>
+            </router-link>
           </div>
         </div>
       </div>
@@ -187,5 +190,31 @@ export default {
 
 .icons-container {
 display: flex;
+}
+
+.make-recipe-button {
+  display: block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 20px;
+}
+
+.make-recipe-button:hover {
+  background-color: #45a049;
+}
+
+button:focus {
+  outline: none;
+}
+
+.container {
+  width: 80%;
+  margin: auto;
 }
 </style>
