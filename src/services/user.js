@@ -2,6 +2,7 @@
 import recipe_full_view from "../assets/mocks/recipe_full_view.json";
 import recipe_preview from "../assets/mocks/recipe_preview.json";
 import family_recipes from "../assets/mocks/family_recipes.json";
+import full_make_recipe from "../assets/mocks/full_make_recipe.json"
 
 
 /*
@@ -93,6 +94,18 @@ export function mockFamilyRecipes() {
 
 export function mockAddToMeal(recipeId) {
   return { status: 200, response: { data: { message: "The Recipe was added to meal successfully", success: true}} };
+}
+
+export async function mockGetMeal() {
+  return { data: { recipes: [full_make_recipe, recipe_full_view] }, status: 200 } ;
+}
+
+export async function mockGetNumberOfRecipesInMeal() {
+  return { data: { numOfRecipes: 2 }, status: 200 } ;
+}
+
+export function mockRemoveFromMeal(recipeId) {
+  return { status: 200, response: { data: { message: "The Recipe was removed from meal successfully", success: true}} };
 }
 
 

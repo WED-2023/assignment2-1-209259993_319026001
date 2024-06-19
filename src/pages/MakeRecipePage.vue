@@ -1,5 +1,5 @@
 <template>
-    <div class="container" v-if="instructions">
+    <div class="container" v-if="instructions && recipe">
         <h1>{{ recipe.title }}</h1>
         <h4>Servings: {{ servings }}</h4>
         <button @click="doubleServings">Double the Servings</button>

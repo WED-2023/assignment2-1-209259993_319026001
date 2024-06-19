@@ -41,6 +41,12 @@ export default {
     this.fav = this.isFav(this.recipe.id);
     this.viewed = this.isViewed(this.recipe.id);
   },
+  props: {
+    recipe: {
+      type: Object,
+      required: true
+    }
+  },
   methods: {
     // method to check if recipe is favorited by user
     isFav(recipeId) {
@@ -91,47 +97,6 @@ export default {
       viewed: false,
       fav: false
     };
-  },
-  props: {
-    recipe: {
-      type: Object,
-      required: true
-    },
-    id: {
-      type: Number,
-      required: true
-    },
-    title: {
-      type: String,
-      required: true
-    },
-    readyInMinutes: {
-      type: Number,
-      required: true
-    },
-    image: {
-      type: String,
-      required: true
-    },
-    aggregateLikes: {
-      type: Number,
-      required: false,
-      default() {
-        return undefined;
-      }
-    },
-    vegetarian: {
-      type: Boolean,
-      required: true
-    },
-    vegan: {
-      type: Boolean,
-      required: true
-    },
-    glutenFree: {
-      type: Boolean,
-      required: true
-    }
   }
 };
 </script>

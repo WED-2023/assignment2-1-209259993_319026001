@@ -19,6 +19,7 @@
         <router-link to="/family-recipes" tag="b-dropdown-item" class="dropdown-item-custom">Family Recipes</router-link>
         </b-nav-item-dropdown>
         <button class="new-recipe-button" @click="showModal">New Recipe</button>
+        <router-link class="nava-link" :to="{ name: 'meal-plan' }">Next Meal: {{ this.numOfRecipes }} Recipes</router-link>
         <button class="logout-button" @click="Logout">Logout</button>
       </div>
       </span>
@@ -39,6 +40,8 @@
 
 <script>
 import NewRecipeModal from './components/NewRecipeModal.vue';
+import { mockGetNumberOfRecipesInMeal } from "./services/user.js";
+
 export default {
   name: "App",
   components: {
@@ -47,7 +50,20 @@ export default {
   data() {
     return {
       isModalVisible: false,
+      numOfRecipes: 0 // represents number of recipes in current meal
     };
+  },
+  async created() {
+    try {
+      const response = await mockGetNumberOfRecipesInMeal();
+      if (response.status !== 200) {
+        this.$router.replace("/NotFound");
+        return;
+      }
+      this.numOfRecipes = response.data.numOfRecipes;
+    } catch (error) {
+      console.error("Error fetching meal plan:", error);
+    }
   },
   methods: {
     Logout() {

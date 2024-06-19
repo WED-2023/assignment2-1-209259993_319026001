@@ -1,5 +1,5 @@
 <template>
-  <b-modal id="recipeModal" title="Create New Recipe" @show="resetForm" hide-footer>
+  <b-modal id="recipeModal" name="recipeModal" title="Create New Recipe" @show="resetForm" hide-footer>
     <div class="custom-modal-content">
       <form @submit.prevent="submitForm">
         <b-card no-body class="mb-4 recipe-details-card">
@@ -77,7 +77,7 @@
           <b-button @click="closeModal" variant="secondary" class="ml-2">Close</b-button>
         </div>
       </form>
-      <b-toaster :append-toast="true" placement="top-center"></b-toaster>
+      <b-toaster name="toaster" :append-toast="true" placement="top-center"></b-toaster>
     </div>
   </b-modal>
 </template>
@@ -86,7 +86,9 @@
 
 <script>
 import { mockAddNewRecipe } from "../services/recipes.js";
+
 export default {
+  name: "NewRecipeModal",
   props: {
     close: {
       type: Function,
