@@ -79,6 +79,9 @@ export default {
                 
                 // Initialize step completion status
                 this.initializeStepCompletion();
+
+                // Initialize local storage dictionary
+                this.initializeLocalStorage();
             } catch (error) {
                 console.log("error:", error);
                 this.$router.replace("/NotFound");
@@ -110,19 +113,32 @@ export default {
             }
         },
         initializeStepCompletion() {
-        // initialize the completed property for each step
-        if (this.instructions && this.instructions.steps) {
-            this.instructions.steps.forEach(step => {
-                // retrieve completion status from local storage
-                const completed = localStorage.getItem(`step-${step.number}`);
-                this.$set(step, 'completed', completed === 'true');
+            // initialize the completed property for each step
+            if (this.instructions && this.instructions.steps) {
+                this.instructions.steps.forEach(step => {
+                    // retrieve completion status from local storage
+                    const completed = localStorage.getItem(`step-${step.number}`);
+                    this.$set(step, 'completed', completed === 'true');
                 });
-             }
+            }
+        },
+        initializeLocalStorage() {
+            // Initialize the dictionary in local storage if it doesn't exist
+            if (!localStorage.getItem('completedSteps')) {
+                localStorage.setItem('completedSteps', JSON.stringify({}));
+            }
         },
         updateCompletionStatus(step) {
-        // Save the completion status to local storage so as long as user is connected
-        // it will save the process. whenever user logs out, local storage clears itself (as defined in logout method)
-        localStorage.setItem(`step-${step.number}`, step.completed);
+            // Save the completion status to local storage
+            localStorage.setItem(`step-${step.number}`, step.completed);
+            
+            // Calculate the number of completed steps
+            const completedStepsCount = this.instructions.steps.filter(step => step.completed).length;
+            
+            // Update the dictionary in local storage
+            let completedStepsDict = JSON.parse(localStorage.getItem('completedSteps'));
+            completedStepsDict[this.$route.params.recipeId] = completedStepsCount;
+            localStorage.setItem('completedSteps', JSON.stringify(completedStepsDict));
         }
     }
 };

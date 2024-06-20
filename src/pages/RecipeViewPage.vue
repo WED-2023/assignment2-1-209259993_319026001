@@ -108,6 +108,7 @@ export default {
       if (response.status !== 200) this.$router.replace("/NotFound");
 
       let {
+        id,
         analyzedInstructions,
         instructions,
         extendedIngredients,
@@ -129,6 +130,7 @@ export default {
         .reduce((a, b) => [...a, ...b], []);
 
       let _recipe = {
+        id,
         instructions,
         _instructions,
         analyzedInstructions,

@@ -11,7 +11,7 @@
               <div>
                 <h5>{{ index + 1 }}. {{ recipe.title }}</h5>
                 <p>Ready in: {{ recipe.readyInMinutes }} minutes</p>
-                <b-progress :max="recipe.instructions.length" :value="recipe.progress" class="mb-2"></b-progress>
+                <b-progress :value="4" :max="10" show-progress animated></b-progress>
               </div>
               <div>
                 <b-button @click="removeFromMealPlan(recipe)" variant="outline-danger">X</b-button>
@@ -36,14 +36,17 @@
 <script>
 import { mockGetMeal, mockRemoveFromMeal } from "../services/user.js";
 import draggable from "vuedraggable";
+import { BProgress } from 'bootstrap-vue';
 
 export default {
   components: {
-    draggable
+    draggable,
+    BProgress
   },
   data() {
     return {
-      mealPlan: [], // This would typically come from a store or API
+      mealPlan: [],
+      progess: {}, // progress of each meal, dictionary of recipeid: progress
       showMealPlan: true, // Toggle for showing/hiding meal plan
       dragOptions: {
         handle: ".drag-handle" // Specify a class for the drag handle
@@ -57,6 +60,8 @@ export default {
         this.$router.replace("/NotFound");
         return;
       }
+      // get completed steps from local storage
+      this.progess =  JSON.parse(localStorage.getItem('completedSteps'));
       this.mealPlan = response.data.recipes.map((recipe, index) => ({
         ...recipe,
         id: index + 1 // Ensure each recipe has a unique id
