@@ -100,10 +100,6 @@ export async function mockGetMeal() {
   return { data: { recipes: [full_make_recipe, recipe_full_view] }, status: 200 } ;
 }
 
-export async function mockGetNumberOfRecipesInMeal() {
-  return { data: { numOfRecipes: 2 }, status: 200 } ;
-}
-
 export function mockRemoveFromMeal(recipeId) {
   return { status: 200, response: { data: { message: "The Recipe was removed from meal successfully", success: true}} };
 }

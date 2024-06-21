@@ -9,9 +9,11 @@
           <b-card-header class="drag-handle">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <h5>{{ index + 1 }}. {{ recipe.title }}</h5>
+                <router-link :to="{ name: 'make-recipe', params: { recipeId: recipe.id } }">
+                  <h5>{{ index + 1 }}. {{ recipe.title }}</h5>
+                </router-link>
                 <p>Ready in: {{ recipe.readyInMinutes }} minutes</p>
-                <b-progress :value="4" :max="10" show-progress animated></b-progress>
+                <b-progress :value="progress[recipe.id]" :max="recipe.analyzedInstructions.length" show-progress animated></b-progress>
               </div>
               <div>
                 <b-button @click="removeFromMealPlan(recipe)" variant="outline-danger">X</b-button>
@@ -43,10 +45,13 @@ export default {
     draggable,
     BProgress
   },
+  props: {
+    updateNumOfRecipes: Function // function to change number of recipes
+  },
   data() {
     return {
       mealPlan: [],
-      progess: {}, // progress of each meal, dictionary of recipeid: progress
+      progress: {}, // progress of each meal, dictionary of recipeid: progress
       showMealPlan: true, // Toggle for showing/hiding meal plan
       dragOptions: {
         handle: ".drag-handle" // Specify a class for the drag handle
@@ -61,10 +66,14 @@ export default {
         return;
       }
       // get completed steps from local storage
-      this.progess =  JSON.parse(localStorage.getItem('completedSteps'));
+      this.progress =  JSON.parse(localStorage.getItem('completedSteps'));
+      // Print the progress dictionary to the console
+      console.log('Progress:', this.progress);
+      // right now fake progress since the recipes are mocks
+      //this.progress = {'324694': 2, '716429': 1}
       this.mealPlan = response.data.recipes.map((recipe, index) => ({
         ...recipe,
-        id: index + 1 // Ensure each recipe has a unique id
+        id: recipe.id || index + 1 // Use recipe.id if it exists, otherwise fallback to index + 1
       }));
     } catch (error) {
       console.error("Error fetching meal plan:", error);
@@ -73,10 +82,12 @@ export default {
   methods: {
     clearMealPlan() {
       this.mealPlan = [];
+      this.updateNumOfRecipes(0);
     },
     removeFromMealPlan(recipe) {
       mockRemoveFromMeal(recipe.id);
       this.mealPlan = this.mealPlan.filter(r => r.id !== recipe.id);
+      this.updateNumOfRecipes(this.mealPlan.length);
     },
     toggleShowMealPlan() {
       this.showMealPlan = !this.showMealPlan;
@@ -117,10 +128,10 @@ export default {
 }
 
 .meal-plan-item {
-  margin-bottom: 20px; /* Adds space between each recipe item */
+  margin-bottom: 20px; 
 }
 
 .drag-handle {
-  cursor: move; /* Change cursor to indicate draggable items */
+  cursor: move;
 }
 </style>
