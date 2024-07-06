@@ -21,7 +21,7 @@
         <div class="form-group">
           <label for="cuisine">Cuisine:</label>
           <select id="cuisine" v-model="selectedCuisine" class="form-control">
-            <option value="No Filter">No Filter</option>
+            <option value="">No Preference</option>
             <option v-for="cuisine in cuisines" :key="cuisine" :value="cuisine">{{ cuisine }}</option>
           </select>
         </div>
@@ -30,7 +30,7 @@
         <div class="form-group">
           <label for="diet">Diet:</label>
           <select id="diet" v-model="selectedDiet" class="form-control">
-            <option value="No Filter">No Filter</option>
+            <option value="">No Preference</option>
             <option v-for="diet in diets" :key="diet" :value="diet">{{ diet }}</option>
           </select>
         </div>
@@ -39,7 +39,7 @@
         <div class="form-group">
           <label for="intolerance">Intolerance:</label>
           <select id="intolerance" v-model="selectedIntolerance" class="form-control">
-            <option value="No Filter">No Filter</option>
+            <option value="">None</option>
             <option v-for="intolerance in intolerances" :key="intolerance" :value="intolerance">{{ intolerance }}</option>
           </select>
         </div>
@@ -52,7 +52,20 @@
       <template #right-column>
         <!-- if user is logged in -->
         <div v-if="$root.store.username" class="last-search-container">
-          <RecipePreviewList :recipes="recipes" :title="`Hey ${$root.store.username}, here is your last search:`" class="RandomRecipes center" />
+          <h3>Hey {{$root.store.username}}, here is your last search:</h3>
+          <!-- Display last search parameters -->
+          <div v-if="lastSearchParams" class="last-search-params">
+            <h5 class="title underline mt-4">Your Last Search:</h5>
+            <p><strong>Search Query:</strong> {{ lastSearchParams.searchQuery }}</p>
+            <p><strong>Recipe Count:</strong> {{ lastSearchParams.recipeCount }}</p>
+            <p><strong>Cuisine:</strong> {{ lastSearchParams.selectedCuisine }}</p>
+            <p><strong>Diet:</strong> {{ lastSearchParams.selectedDiet }}</p>
+            <p><strong>Intolerance:</strong> {{ lastSearchParams.selectedIntolerance }}</p>
+          </div>
+          <div v-else class="error-message">
+            <h5 class="title mt-4">You haven't searched anything!</h5>
+            <p>Please perform a search to see the results here.</p>
+          </div>
         </div>
       </template>
 
@@ -66,7 +79,6 @@ import TwoColumnsLayout from "../components/TwoColumnsLayout.vue";
 import cuisine from "../assets/cuisine";
 import intolerances from "../assets/intolerances";
 import diets from "../assets/diets";
-import { mockGetRecipesPreview } from "../services/recipes.js";
 
 export default {
   components: {
@@ -78,37 +90,36 @@ export default {
       recipes: [],
       recipeCount: 5, // Default number of recipes to display
       searchQuery: "", // User input for recipe search
-      selectedCuisine: "No Filter", // as requested in assignment
-      selectedDiet: "No Filter",
-      selectedIntolerance: "No Filter",
+      selectedCuisine: "", // as requested in assignment
+      selectedDiet: "",
+      selectedIntolerance: "",
       intolerances: intolerances, // Import from intolerances.js file
       diets: diets, // Import from diets.js file
-      cuisines: cuisine // Import from countries.js file
+      cuisines: cuisine, // Import from countries.js file
+      lastSearchParams: null // Store last search parameters
     };
   },
   async created() {
-    await this.lastSearchRecipes();
+    const lastSearchParams = JSON.parse(localStorage.getItem('lastSearchParams'));
+    if (lastSearchParams) {
+      this.lastSearchParams = lastSearchParams;
+    }
   },
   methods: {
     search() {
-      this.$router.push({ name: 'results', query: { search: this.searchQuery, cuisine: this.selectedCuisine, diet: this.selectedDiet, intolerance: this.selectedIntolerance } });
-    },
-    async lastSearchRecipes(recipeCount) {
-      try {
-        // const response = await this.axios.get(
-        //   this.$root.store.server_domain + "/recipes/random",
-        // );
+    // Save search parameters to local storage
+    const searchParams = {
+      searchQuery: this.searchQuery || "None",
+      selectedCuisine: this.selectedCuisine || "No Preference",
+      selectedDiet: this.selectedDiet || "No Preference",
+      selectedIntolerance: this.selectedIntolerance || "None",
+      recipeCount: this.recipeCount
+    };
+    localStorage.setItem('lastSearchParams', JSON.stringify(searchParams));
 
-        const response = mockGetRecipesPreview(this.recipeCount);
-        console.log(response);
-        const recipes = response.data.recipes;
-        console.log(recipes);
-        this.recipes = [];
-        this.recipes.push(...recipes);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    // Navigate to the results page
+    this.$router.push({ name: 'results', query: { search: this.searchQuery, cuisine: this.selectedCuisine, diet: this.selectedDiet, intolerance: this.selectedIntolerance, recipeCount: this.recipeCount } });
+  }
   }
 };
 </script>
@@ -121,5 +132,16 @@ export default {
 
 .searchbar {
   margin-bottom: 20px;
+}
+
+.error-message {
+  margin-top: 20px;
+  color: red;
+  text-align: center;
+}
+
+.title.underline {
+  border-bottom: 2px solid #000; 
+  display: inline-block; 
 }
 </style>

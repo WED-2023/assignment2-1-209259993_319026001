@@ -48,8 +48,18 @@
                   <b-form-input v-model="ingredient.unit" :placeholder="'Unit'" required></b-form-input>
                 </b-form-group>
               </div>
+
+              <div class="mb-2" v-for="(equipment, eIndex) in instruction.equipment" :key="'equipment-' + index + '-' + eIndex">
+                <b-form-group :label="'Equipment ' + (eIndex + 1)" :label-for="'equipment-' + index + '-' + eIndex">
+                  <b-form-input v-model="equipment.name" :placeholder="'Equipment ' + (eIndex + 1)" required></b-form-input>
+                </b-form-group>
+              </div>
+
               <b-button @click="addIngredient(index)" variant="secondary">Add Ingredient to this Step</b-button>
+              <br><br>
+              <b-button @click="addEquipment(index)" variant="secondary">Add Equipment to this Step</b-button>
             </div>
+            
             <b-button @click="addInstruction" variant="secondary">Add Step</b-button>
           </b-card-body>
         </b-card>
@@ -105,7 +115,8 @@ export default {
         instructions: [
           {
             step: '',
-            ingredients: []  // Start with no ingredients
+            ingredients: [],  // Start with no ingredients or equipment
+            equipment: []
           }
         ],
         vegetarian: false,
@@ -117,6 +128,7 @@ export default {
   methods: {
     resetForm() {
       this.form = {
+        username: $root.store.username,
         title: '',
         image: '',
         readyInMinutes: '',
@@ -135,6 +147,9 @@ export default {
     addIngredient(stepIndex) {
       this.form.instructions[stepIndex].ingredients.push({ name: '', amount: '', unit: '' });
     },
+    addEquipment(index) {
+    this.form.instructions[index].equipment.push({ name: '' });
+    },
     addInstruction() {
       this.form.instructions.push({ step: '', ingredients: [] });  // Add new instruction with no ingredients
     },
@@ -149,6 +164,7 @@ export default {
 
       console.log('Form submitted with data:', this.form);
       const response = mockAddNewRecipe(
+        this.form.username,
         this.form.title,
         this.form.image,
         this.form.readyInMinutes,
