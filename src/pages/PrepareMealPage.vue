@@ -60,7 +60,12 @@ export default {
   },
   async created() {
     try {
-      const response = await mockGetMeal();
+      this.axios.defaults.withCredentials=true;
+      const response = await this.axios.get(
+        this.$root.store.server_domain + "/users/" + this.$root.store.username + "/meal"
+      );
+      console.log(response);
+      this.lastRecipes = response.data;
       if (response.status !== 200) {
         this.$router.replace("/NotFound");
         return;
@@ -84,8 +89,23 @@ export default {
       this.mealPlan = [];
       this.updateNumOfRecipes(0);
     },
-    removeFromMealPlan(recipe) {
-      mockRemoveFromMeal(recipe.id);
+    async removeFromMealPlan(recipe) {
+      try {
+        this.axios.defaults.withCredentials=true;
+      const response = await this.axios.post(
+          this.$root.store.server_domain + "/users/" + this.$root.store.username + "meal/remove",
+          {
+            recipeId: this.recipe.id
+          }
+        );
+      } catch (error) {
+      console.log(error);
+      }
+      if (response.status !== 200) {
+          this.$root.toast("Remove From meal", response.data.message, "fail");
+          return;
+        }
+        this.$root.toast("Remove From meal", "Removed From meal successfully", "success");
       this.mealPlan = this.mealPlan.filter(r => r.id !== recipe.id);
       this.updateNumOfRecipes(this.mealPlan.length);
     },

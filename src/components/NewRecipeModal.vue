@@ -151,29 +151,34 @@ export default {
     this.form.instructions[index].equipment.push({ name: '' });
     },
     addInstruction() {
-      this.form.instructions.push({ step: '', ingredients: [] });  // Add new instruction with no ingredients
+      this.form.instructions.push({ step: '', ingredients: [], equipment: [] });  // Add new instruction with no ingredients
     },
     closeModal() {
       this.close();
     },
-    submitForm() {
+    async submitForm() {
       this.form.instructions.forEach(instruction => {
         instruction.ingredients = instruction.ingredients.filter(ingredient => ingredient.name.trim() !== '');
       });
       this.form.instructions = this.form.instructions.filter(instruction => instruction.step.trim() !== '');
 
       console.log('Form submitted with data:', this.form);
-      const response = mockAddNewRecipe(
-        this.form.username,
-        this.form.title,
-        this.form.image,
-        this.form.readyInMinutes,
-        this.form.servings,
-        this.form.instructions,
-        this.form.vegetarian,
-        this.form.vegan,
-        this.form.glutenFree
-      );
+
+      const response = await this.axios.post(
+          this.$root.store.server_domain + "/users/" + this.$root.store.username + "/recipes",
+          {
+            username: this.$root.store.username ,
+            title: this.form.title,
+            image: this.form.image,
+            email: this.form.email,
+            readyInMinutes: this.form.readyInMinutes,
+            servings: this.form.servings,
+            instructions: this.form.instructions,
+            vegetarian: this.form.vegetarian,
+            vegan: this.form.vegan,
+            glutenFree: this.form.glutenFree
+          }
+        );
 
       if (response.response.data.success === true) {
         this.$bvToast.toast("Recipe Created", {

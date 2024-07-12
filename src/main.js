@@ -2,6 +2,12 @@ import Vue from "vue";
 import App from "./App.vue";
 import VueAxios from "vue-axios";
 import axios from "axios";
+import store from './store';
+import VueCookies from "vue-cookies";
+
+Vue.use(store);
+Vue.use(VueCookies);
+axios.defaults.withCredentials=true;
 
 import routes from "./routes";
 import VueRouter from "vue-router";
@@ -39,6 +45,8 @@ import {
 ].forEach((x) => Vue.use(x));
 Vue.use(Vuelidate);
 
+axios.defaults.withCredentials = true;
+
 axios.interceptors.request.use(
   function(config) {
     // Do something before request is sent
@@ -67,7 +75,8 @@ Vue.use(VueAxios, axios);
 Vue.config.productionTip = false;
 
 const shared_data = {
-  server_domain: "http://localhost:3000",
+  //server_domain: "http://localhost:80",
+  server_domain: "https://lior-noa.cs.bgu.ac.il",
   username: localStorage.username,
   login(username) {
     localStorage.setItem("username", username);

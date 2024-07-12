@@ -17,7 +17,7 @@
       </div>
       <ul class="recipe-overview">
         <li>{{ recipe.readyInMinutes }} minutes</li>
-        <li>{{ recipe.aggregateLikes }} likes</li>
+        <li>{{ recipe.popularity }} likes</li>
         <li v-if="recipe.vegetarian">
           <img src="@/assets/icons/no-meat.png" alt="Vegetarian" class="icon" />
         </li>

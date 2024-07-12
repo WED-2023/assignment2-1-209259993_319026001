@@ -34,12 +34,14 @@
   methods: {
       async getFavorites() {
         try {
-          const response = mockGetFavorites();
-          const recipes = response.data.recipes;
-          this.recipes = [];
-          this.recipes.push(...recipes);
+          this.axios.defaults.withCredentials=true;
+          const response = await this.axios.get(
+            this.$root.store.server_domain + "/users/" + this.$root.store.username + "/favorites"
+          );
+          console.log(response);
+          this.recipes = response.data;
         } catch (error) {
-          console.error("Error fetching recipes:", error);
+          console.log(error);
         }
       }
     }

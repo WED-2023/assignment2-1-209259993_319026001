@@ -222,22 +222,20 @@ export default {
     async Register() {
       try {
 
-        // const response = await this.axios.post(
-        //   // "https://test-for-3-2.herokuapp.com/user/Register",
-        //   this.$root.store.server_domain + "/Register",
-
-        //   {
-        //     username: this.form.username,
-        //     password: this.form.password
-        //   }
-        // );
-
-        const userDetails = {
-          username: this.form.username,
-          password: this.form.password
-        };
-        
-        const response = mockRegister(userDetails)
+        const response = await this.axios.post(
+          this.$root.store.server_domain + "/Register",
+          {
+            username: this.form.username,
+            password: this.form.password,
+            country: this.form.country,
+            email: this.form.email
+          }
+        );
+        if (response.status !== 200) {
+          this.$root.toast("Register", response.data.message, "fail");
+          return;
+        }
+        this.$root.toast("Register", "User registered successfully", "success");
 
         this.$router.push("/login");
         // console.log(response);

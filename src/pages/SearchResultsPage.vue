@@ -26,7 +26,6 @@
 
 <script>
 import RecipePreviewList from "../components/RecipePreviewList.vue";
-import { mockSearchDatabase } from "../services/recipes.js";
 export default {
   components: {
     RecipePreviewList
@@ -37,7 +36,9 @@ export default {
         cuisine: this.$route.query.cuisine,
         diet: this.$route.query.diet,
         intolerance: this.$route.query.intolerance,
-        recipes: []
+        recipeCount: this.$route.query.recipeCount,
+        recipes: [],
+        sortCriteria: None
     };
 },
 async created() {
@@ -46,10 +47,17 @@ async created() {
 methods: {
     async searchRecipesInDataBase() {
       try {
-        const response = mockSearchDatabase(this.search, this.cuisine, this.diet, this.intolerance);
-        const recipes = response.data.recipes;
-        this.recipes = [];
-        this.recipes.push(...recipes);
+        const response = await this.axios.get(
+          this.$root.store.server_domain + "/recipes/search",
+          {
+            recipeName: this.search,
+            cuisine: this.cuisine,
+            diet: this.diet,
+            intolerance: this.intolerance,
+            number: this.recipeCount
+          }
+        );
+        this.recipes = response.data;
       } catch (error) {
         console.error("Error fetching recipes:", error);
       }
@@ -63,7 +71,7 @@ methods: {
                         return a.readyInMinutes - b.readyInMinutes;
                     case 'likes':
                       // from most likes to least likes, assuming higher number of likes is better
-                        return b.aggregateLikes - a.aggregateLikes;
+                        return b.popularity - a.popularity;
                     default:
                       // if no sort, return regular results
                         return 0;

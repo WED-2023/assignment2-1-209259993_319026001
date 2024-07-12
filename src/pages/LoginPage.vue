@@ -65,7 +65,6 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import {mockLogin} from "../services/auth.js"
 export default {
   name: "Login",
   data() {
@@ -94,22 +93,31 @@ export default {
     },
     async Login() {
       try {
-        
-        // const response = await this.axios.post(
-        //   this.$root.store.server_domain +"/Login",
+        const response = await this.axios.post(
+          this.$root.store.server_domain + "/login",
+          {
+            username: this.form.username,
+            password: this.form.password
+          },
+          { withCredentials: true } 
+        );
 
+        // Log the full response
+        console.log('Response:', response);
 
-        //   {
-        //     username: this.form.username,
-        //     password: this.form.password
-        //   }
-        // );
+        // Log specific parts of the response
+        console.log('Response Data:', response.data);
+        console.log('Response Headers:', response.headers);
+        console.log('Status:', response.status);
+        console.log('Status Text:', response.statusText);
 
-        const success = true; // modify this to test the error handling
-        const response = mockLogin(this.form.username, this.form.password, success);
+        // Log cookies
+        console.log('Cookies:', document.cookie);
+        // Use vue-cookies to get the cookie
+        const usernameCookie = this.$cookies.get('username');
+        console.log('Username cookie:', usernameCookie);
 
-        // console.log(response);
-        // this.$root.loggedIn = true;
+        this.$root.loggedIn = true;
         console.log(this.$root.store.login);
         this.$root.store.login(this.form.username);
         this.$router.push("/");

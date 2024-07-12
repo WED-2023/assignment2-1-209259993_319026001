@@ -87,12 +87,16 @@ export default {
         console.error("Failed to add to favorites:", response.response.data.message);
       }
     },
-    handleMakeRecipe(event) {
-      // Perform the function logic here
+    async handleMakeRecipe(event) {
       console.log('Recipe making process started');
       try {
-      // Navigate to the recipe page manually
-      let response = mockAddToMeal(this.recipe.id);
+      this.axios.defaults.withCredentials=true;
+      const response = await this.axios.post(
+          this.$root.store.server_domain + "/users/" + this.$root.store.username + "meal/add",
+          {
+            recipeId: this.recipe.id
+          }
+        );
       if (response.status !== 200) this.$router.replace("/NotFound");
       console.log("Redirecting...");
       }

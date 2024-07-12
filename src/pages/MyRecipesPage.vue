@@ -18,7 +18,6 @@
   
   <script>
   import RecipePreviewList from "../components/RecipePreviewList.vue";
-  import { mockGetUserRecipes } from "../services/user.js";
   export default {
     components: {
       RecipePreviewList
@@ -34,12 +33,13 @@
   methods: {
       async getUserRecipes() {
         try {
-          const response = mockGetUserRecipes();
-          const recipes = response.data.recipes;
-          this.recipes = [];
-          this.recipes.push(...recipes);
+          const response = await this.axios.get(
+            this.$root.store.server_domain + "/users/" + this.$root.store.username + "/recipes"
+          );
+          console.log(response);
+          this.recipes = response.data;
         } catch (error) {
-          console.error("Error fetching recipes:", error);
+          console.log(error);
         }
       }
     }

@@ -1,6 +1,6 @@
 const state = {
 
-    server_domain: "http://localhost:3000",
+    server_domain: "https://lior-noa.cs.bgu.ac.il",
 
     // server_domain: "http://132.72.65.211/",
     

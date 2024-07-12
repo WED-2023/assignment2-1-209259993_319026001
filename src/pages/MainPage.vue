@@ -48,7 +48,6 @@
 import RecipePreviewList from "../components/RecipePreviewList";
 import TwoColumnsLayout from '../components/TwoColumnsLayout';
 import Login from '../pages/LoginPage';
-import { mockGetRecipesPreview } from "../services/recipes.js";
 export default {
   components: {
     RecipePreviewList,
@@ -68,36 +67,22 @@ export default {
   methods: {
     async fetchNewRecipes() {
       try {
-        // const response = await this.axios.get(
-        //   this.$root.store.server_domain + "/recipes/random",
-        // );
-
-        const amountToFetch = 3; // Set this to how many recipes you want to fetch
-        const response = mockGetRecipesPreview(amountToFetch);
-
-
+        const response = await this.axios.get(
+          this.$root.store.server_domain + "/recipes/random",
+        );
         console.log(response);
-        const recipes = response.data.recipes;
-        console.log(recipes);
-        this.randomRecipes = [];
-        this.randomRecipes.push(...recipes);
+        this.randomRecipes = response.data;
       } catch (error) {
         console.log(error);
       }
     },
     async getLastViewedRecipes() {
       try {
-        // const response = await this.axios.get(
-        //   this.$root.store.server_domain + "/recipes/random",
-        // );
-
-        const amountToFetch = 3; // Set this to how many recipes you want to fetch
-        const response = mockGetRecipesPreview(amountToFetch);
+        const response = await this.axios.get(
+          this.$root.store.server_domain + "/users/" + this.$root.store.username + "/lastViewed"
+        );
         console.log(response);
-        const recipes = response.data.recipes;
-        console.log(recipes);
-        this.lastRecipes = [];
-        this.lastRecipes.push(...recipes);
+        this.lastRecipes = response.data.recipes;
       } catch (error) {
         console.log(error);
       }

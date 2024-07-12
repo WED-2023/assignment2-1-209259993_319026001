@@ -40,7 +40,6 @@
 
 
 <script>
-import { mockGetRecipeInstructions, mockGetRecipeDetailsForIngridients } from "../services/recipes.js";
 
 export default {
     data() {
@@ -53,19 +52,24 @@ export default {
     },
     async created() {
         try {
-            let response;
-            
             try {
-                response = await mockGetRecipeInstructions(this.$route.params.recipeId);
+                // get analayzed instructions of recipe
+                this.axios.defaults.withCredentials=true;
+                const response = await this.axios.get(
+                this.$root.store.server_domain + "/recipes/instructions/" + this.$route.params.recipeId
+                );
                 
                 if (response.status && response.status !== 200) {
                     this.$router.replace("/NotFound");
                     return;
                 }
 
-                this.instructions = response.data.instructions[0];
+                this.instructions = response.data;
 
-                response = await mockGetRecipeDetailsForIngridients(this.$route.params.recipeId);
+                response = await this.axios.get(
+                this.$root.store.server_domain + "/recipes/get/" + this.$route.params.recipeId
+                );
+                
                 if (response.status && response.status !== 200) {
                     this.$router.replace("/NotFound");
                     return;

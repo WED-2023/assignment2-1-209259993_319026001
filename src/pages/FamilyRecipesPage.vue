@@ -12,7 +12,6 @@
 
 <script>
 import FamilyRecipePreview from "../components/FamilyRecipePreview";
-import { mockFamilyRecipes } from "../services/user.js"
 
 export default {
     components: {
@@ -28,16 +27,15 @@ export default {
     },
     methods: {
         async getFamilyRecipes() {
-            try {
-                const amountToFetch = 3; // Set this to how many recipes you want to fetch
-                const response = mockFamilyRecipes(amountToFetch);
-                console.log(response);
-                const recipes = response.data.recipes;
-                console.log(recipes);
-                this.recipes = [];
-                this.recipes.push(...recipes);
+          try {
+            this.axios.defaults.withCredentials=true;
+            const response = await this.axios.get(
+              this.$root.store.server_domain + "/users/" + this.$root.store.username + "/family"
+            );
+            console.log(response);
+            this.recipes = response.data;
             } catch (error) {
-                console.log(error);
+              console.log(error);
             }
         }
     }

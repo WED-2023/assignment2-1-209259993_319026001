@@ -53,11 +53,15 @@ export default {
     };
   },
   methods: {
-    Logout() {
+    async Logout() {
       this.$root.store.logout();
       this.$root.toast("Logout", "User logged out successfully", "success");
       // clear local storage
       localStorage.clear();
+      const response = await this.axios.post(
+          this.$root.store.server_domain +"/logout"
+        );
+      console.log("logged out:", response);
 
       this.$router.push("/").catch(() => {
         this.$forceUpdate();
