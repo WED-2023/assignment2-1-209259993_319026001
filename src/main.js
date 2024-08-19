@@ -2,12 +2,9 @@ import Vue from "vue";
 import App from "./App.vue";
 import VueAxios from "vue-axios";
 import axios from "axios";
-import store from './store';
-import VueCookies from "vue-cookies";
 
-Vue.use(store);
+import VueCookies from "vue-cookies";
 Vue.use(VueCookies);
-axios.defaults.withCredentials=true;
 
 import routes from "./routes";
 import VueRouter from "vue-router";
@@ -45,27 +42,20 @@ import {
 ].forEach((x) => Vue.use(x));
 Vue.use(Vuelidate);
 
+// set using credentials to true
 axios.defaults.withCredentials = true;
 
-axios.interceptors.request.use(
-  function(config) {
-    // Do something before request is sent
-    return config;
-  },
-  function(error) {
-    // Do something with request error
-    return Promise.reject(error);
-  }
-);
+// Request interceptor
+axios.interceptors.request.use(config => {
+  return config;
+});
 
-// Add a response interceptor
+// Response interceptor
 axios.interceptors.response.use(
-  function(response) {
-    // Do something with response data
+  response => {
     return response;
   },
-  function(error) {
-    // Do something with response error
+  error => {
     return Promise.reject(error);
   }
 );
@@ -90,7 +80,7 @@ const shared_data = {
   },
 };
 console.log(shared_data);
-// Vue.prototype.$root.store = shared_data;
+//Vue.prototype.$root.store = shared_data;
 
 new Vue({
   router,
@@ -113,3 +103,6 @@ new Vue({
   },
   render: (h) => h(App),
 }).$mount("#app");
+
+// Export axios and shared_data for use in other files
+export { axios, shared_data };

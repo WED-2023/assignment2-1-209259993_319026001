@@ -47,7 +47,7 @@
 <script>
 import RecipePreviewList from "../components/RecipePreviewList";
 import TwoColumnsLayout from '../components/TwoColumnsLayout';
-import Login from '../pages/LoginPage';
+import Login from '../components/Login';
 export default {
   components: {
     RecipePreviewList,
@@ -62,7 +62,9 @@ export default {
   },
   async created() {
     await this.fetchNewRecipes();
-    await this.getLastViewedRecipes();
+    if (this.$root.store.username) {
+      await this.getLastViewedRecipes();
+    }
 },
   methods: {
     async fetchNewRecipes() {
@@ -77,9 +79,16 @@ export default {
       }
     },
     async getLastViewedRecipes() {
+      console.log("Checking session data...");
+      const username = this.$root.store.username;
+      const sessionCookie = document.cookie.includes("session");
+      console.log("username:", username, "cookies:", sessionCookie);
       try {
         const response = await this.axios.get(
-          this.$root.store.server_domain + "/users/" + this.$root.store.username + "/lastViewed"
+          `${this.$root.store.server_domain}/users/${this.$root.store.username}/lastViewed`,
+          {
+            withCredentials: true
+          }
         );
         console.log(response);
         this.lastRecipes = response.data.recipes;

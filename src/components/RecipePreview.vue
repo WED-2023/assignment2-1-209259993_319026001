@@ -1,7 +1,8 @@
 <template>
   <div class="recipe-preview">
     <div class="recipe-body">
-      <router-link :to="{ name: 'recipe', params: { recipeId: recipe.id } }" @click.native="markAsViewed(recipe.id)" ><img :src="recipe.image" class="recipe-image" />
+      <router-link :to="{ name: 'recipe', params: { recipeId: recipe.id } }" @click.native="markAsViewed(recipe.id)">
+        <img :src="recipe.image" class="recipe-image" />
       </router-link> 
       <!-- if favorited, show full icon. else, show to favorite icon -->
       <button class="fav-button" @click="handleFavClick(recipe.id, $event)">
@@ -33,13 +34,19 @@
 </template>
 
 <script>
-// import mock functions of user
-import { mockAddFavorite, mockIsInFav, mockIsViewed, mockViewRecipe } from '../services/user.js'; // Import the mock function
+import { addToFavorites, isInFav, isInViewed } from '../services/user';
 export default {
-  mounted() {
-    // variables to save status of favorite adding and viewing of recipe by user
-    this.fav = this.isFav(this.recipe.id);
-    this.viewed = this.isViewed(this.recipe.id);
+  data() {
+    return {
+      viewed: false,
+      fav: false
+    };
+  },
+  async created() {
+    if (this.$root.store.username) {
+      this.fav = isInFav(this.recipe.id);
+      this.viewed = isInViewed(this.recipe.id);
+    }
   },
   props: {
     recipe: {
@@ -48,55 +55,33 @@ export default {
     }
   },
   methods: {
-    // method to check if recipe is favorited by user
-    isFav(recipeId) {
-      const response = mockIsInFav(recipeId);
-      return response.response.data.success;
-    },
-    // method to check if recipe is viewed by user
-    isViewed(recipeId) {
-      const response = mockIsViewed(recipeId);
-      return response.response.data.success;
-    },
     handleFavClick(recipeId, event) {
       event.stopPropagation(); // Stop event propagation
 
       if (!this.$root.store.username) {
-        // User is not logged in
         alert('You must be logged in to favorite a recipe.');
       } else {
-        // User is logged in, proceed to add to favorites
-        this.addToFav(recipeId);
+        // update status favorites
+        this.fav = addToFavorites(recipeId);
       }
     },
-    // method to add recipe to user's favorite recipes
-    addToFav(recipeId) {
-      console.log("addToFav called");
-      const response = mockAddFavorite(recipeId);
-      if (response.response.data.success === true) {
-        this.fav = true;
-        console.log("successfully added to favorites");
-      } else {
-        console.error("Failed to add to favorites:", response.response.data.message);
-      }
-    },
-    // method to mark recipe as viewed
-    markAsViewed(recipeId) {
-      const response = mockViewRecipe(recipeId);
-      if (response.response.data.success === true) {
-        this.viewed = true;
-        console.log("successfully marked as viewed");
-      } else {
-        console.error("Failed to mark as viewed:", response.response.data.message);
-      }
+    async markAsViewed(recipeId) {
+      try {
+        console.log("markAsViewed called");
+        const response = await this.axios.post(
+          this.$root.store.server_domain + "/users/" + this.$root.store.username + "/view",
+          { recipeId: recipeId }
+        );
+        if (response.data === true) {
+          this.viewed = true;
+          console.log("successfully marked as viewed");
+        } else {
+          console.error("Failed to mark as viewed:", response.message);
+        }
+      } catch (error) {
+        console.log(error);
+      } 
     }
-  },
-  data() {
-    return {
-      // return variables
-      viewed: false,
-      fav: false
-    };
   }
 };
 </script>

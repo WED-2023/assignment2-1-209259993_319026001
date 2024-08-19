@@ -61,31 +61,21 @@
 </template>
 
 <script>
-import { mockGetRecipeFullDetails } from "../services/recipes.js";
-import { mockIsInFav, mockAddFavorite, mockAddToMeal } from '../services/user.js';
-
+import { isInFav, addToFavorites } from '../services/user';
+import { getRecipe, getInstructions } from '../services/recipes';
 export default {
   mounted() {
-    this.fav = this.isFav(this.recipe.id);
+    this.fav = isInFav(this.recipe.id);
   },
   data() {
     return {
-      recipe: null,
+      recipe: {},
       fav: false
     };
   },
   methods: {
-    isFav(recipeId) {
-      const response = mockIsInFav(recipeId);
-      return response.response.data.success;
-    },
-    addToFav(recipeId) {
-      const response = mockAddFavorite(recipeId);
-      if (response.response.data.success === true) {
-        this.fav = true;
-      } else {
-        console.error("Failed to add to favorites:", response.response.data.message);
-      }
+    async addToFav(recipeId) {
+      this.fav = addToFavorites(recipeId)
     },
     async handleMakeRecipe(event) {
       console.log('Recipe making process started');
@@ -108,50 +98,86 @@ export default {
   },
   async created() {
     try {
-      let response = mockGetRecipeFullDetails(this.$route.params.recipeId);
-      if (response.status !== 200) this.$router.replace("/NotFound");
+      // Ensure credentials are included
+      this.axios.defaults.withCredentials = true;
 
-      let {
-        id,
-        analyzedInstructions,
-        instructions,
-        extendedIngredients,
-        aggregateLikes,
-        readyInMinutes,
-        image,
-        title,
-        servings,
-        vegetarian,
-        vegan,
-        glutenFree
-      } = response.data.recipe;
+      // Log the request URL for debugging
+      console.log("Request URL:", this.$root.store.server_domain + "/recipes/get/" + this.$route.params.recipeId);
 
-      let _instructions = analyzedInstructions
-        .map((fstep) => {
-          fstep.steps[0].step = fstep.name + fstep.steps[0].step;
-          return fstep.steps;
-        })
-        .reduce((a, b) => [...a, ...b], []);
+      const response = await getRecipe(this.$route.params.recipeId);
 
-      let _recipe = {
-        id,
-        instructions,
-        _instructions,
-        analyzedInstructions,
-        extendedIngredients,
-        aggregateLikes,
-        readyInMinutes,
-        image,
-        title,
-        servings,
-        vegetarian,
-        vegan,
-        glutenFree
-      };
+      // Log the response for debugging
+      console.log("Response for recipe:", response);
 
-      this.recipe = _recipe;
+      // Check if the response status is OK
+      if (response.status !== 200 && response.status !== 304) {
+        this.$router.replace("/NotFound");
+        return;
+      }
+
+      // Log the data to ensure it's structured as expected
+      console.log("Response Data:", response.data);
+
+      // Destructure the response data
+      // let {
+      //   id,
+      //   instructions,
+      //   extendedIngredients,
+      //   aggregateLikes,
+      //   readyInMinutes,
+      //   image,
+      //   title,
+      //   servings,
+      //   vegetarian,
+      //   vegan,
+      //   glutenFree
+      // } = response.data;
+
+      // // get instructions of recipe
+      // response = await getInstructions(this.$route.params.recipeId);
+
+      // // Log the response for debugging
+      // console.log("Response for instructions:", response);
+
+      // // Check if the response status is OK
+      // if (response.status !== 200) {
+      //   this.$router.replace("/NotFound");
+      //   return;
+      // }
+
+      // // Process instructions
+      // let _instructions = response.data
+      //   .map((fstep) => {
+      //     fstep.steps[0].step = fstep.name + fstep.steps[0].step;
+      //     return fstep.steps;
+      //   })
+      //   .reduce((a, b) => [...a, ...b], []);
+
+      // Construct the recipe object
+      // let _recipe = {
+      //   id,
+      //   instructions,
+      //   _instructions,
+      //   analyzedInstructions,
+      //   extendedIngredients,
+      //   aggregateLikes,
+      //   readyInMinutes,
+      //   image,
+      //   title,
+      //   servings,
+      //   vegetarian,
+      //   vegan,
+      //   glutenFree
+      // };
+
+      // // Log the constructed recipe for debugging
+      // console.log("Constructed Recipe:", _recipe);
+
+      // Assign the recipe to the component's data
+      this.recipe = response.data;
     } catch (error) {
-      console.log(error);
+      // Log any errors
+      console.log("Error:", error);
     }
   }
 };

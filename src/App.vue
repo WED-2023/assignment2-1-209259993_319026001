@@ -41,6 +41,7 @@
 <script>
 import NewRecipeModal from './components/NewRecipeModal.vue';
 
+
 export default {
   name: "App",
   components: {
@@ -81,7 +82,7 @@ export default {
       this.numOfRecipes = newNumOfRecipes;
     }
   }
-};
+  }
 </script>
 
 <style lang="scss">

@@ -18,7 +18,6 @@
   
   <script>
   import RecipePreviewList from "../components/RecipePreviewList.vue";
-  import { mockGetFavorites } from "../services/user.js";
   export default {
     components: {
       RecipePreviewList
