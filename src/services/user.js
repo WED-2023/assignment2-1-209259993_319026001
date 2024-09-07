@@ -8,6 +8,7 @@ export async function isInFav(recipeId) {
       {
         withCredentials: true
       });
+      console.log("is fav:", response)
       return response.data;
   } catch (error) {
     console.log(error);
@@ -18,17 +19,12 @@ export async function isInFav(recipeId) {
 // function to check if recipe was viewed by user
 export async function isInViewed(recipeId) {
   try {
-        // Log the username to verify it's correctly set
-        console.log("Username:", shared_data.username);
-
-        // Log the cookies to verify they are being sent
-        const cookies = document.cookie;
-        console.log("Cookies:", cookies);
     const response = await axios.get(
       `${shared_data.server_domain}/users/${shared_data.username}/isViewed/${recipeId}`,
       {
         withCredentials: true
       });
+      console.log("is view:", response)
       return response.data;
  } catch (error) {
     console.log(error);

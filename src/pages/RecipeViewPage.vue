@@ -11,7 +11,7 @@
             <span class="detail-label">Ready in:</span> {{ recipe.readyInMinutes }} minutes
           </div>
           <div class="detail-item">
-            <span class="detail-label">Likes:</span> {{ recipe.aggregateLikes }} likes
+            <span class="detail-label">Likes:</span> {{ recipe.popularity }} likes
           </div>
           <div class="detail-item">
             <span class="detail-label">Servings:</span> {{ recipe.servings }} servings
@@ -32,7 +32,7 @@
               {{ fav ? 'Favorited' : 'Add to Favorites' }}
             </button>
             <router-link 
-              :to="{ name: 'make-recipe', params: { recipeId: recipe.id } }" 
+              :to="{ name: 'make-recipe', params: { recipeId: this.$route.params.recipeId } }" 
               class="make-recipe-link"
               @click.native="handleMakeRecipe">
               <button class="make-recipe-button">Make This Recipe</button>
@@ -49,11 +49,7 @@
         </div>
         <div class="instructions">
           <h2>Instructions</h2>
-          <ol>
-            <li v-for="s in recipe.instructions" :key="s.number">
-              {{ s.step }}
-            </li>
-          </ol>
+          <div v-html="formattedInstructions"></div>
         </div>
       </div>
     </div>
@@ -62,32 +58,43 @@
 
 <script>
 import { isInFav, addToFavorites } from '../services/user';
-import { getRecipe, getInstructions } from '../services/recipes';
+import { getRecipe} from '../services/recipes';
 export default {
-  mounted() {
-    this.fav = isInFav(this.recipe.id);
+  async mounted() {
+    const favStatus = await isInFav(this.$route.params.recipeId);
+    console.log("Favorite status from server:", favStatus);
+    this.fav = favStatus;
   },
   data() {
     return {
       recipe: {},
-      fav: false
+      fav: false,
+      formattedInstructions: ""
     };
+  },
+  props: {
+    mealPlan: [], // recipes in meal
+    updateRecipes: Function // function to change recipes
   },
   methods: {
     async addToFav(recipeId) {
-      this.fav = addToFavorites(recipeId)
+      this.fav = await addToFavorites(recipeId)
     },
     async handleMakeRecipe(event) {
       console.log('Recipe making process started');
+      // redirect to recipe make page
       try {
       this.axios.defaults.withCredentials=true;
       const response = await this.axios.post(
-          this.$root.store.server_domain + "/users/" + this.$root.store.username + "meal/add",
+          this.$root.store.server_domain + "/users/" + this.$root.store.username + "/meal/add",
           {
             recipeId: this.recipe.id
           }
         );
       if (response.status !== 200) this.$router.replace("/NotFound");
+      // add recipes to local meal
+      this.mealPlan.push(this.recipe);
+      this.updateRecipes(this.mealPlan);
       console.log("Redirecting...");
       }
       catch (error) {
@@ -98,8 +105,6 @@ export default {
   },
   async created() {
     try {
-      // Ensure credentials are included
-      this.axios.defaults.withCredentials = true;
 
       // Log the request URL for debugging
       console.log("Request URL:", this.$root.store.server_domain + "/recipes/get/" + this.$route.params.recipeId);
@@ -118,63 +123,9 @@ export default {
       // Log the data to ensure it's structured as expected
       console.log("Response Data:", response.data);
 
-      // Destructure the response data
-      // let {
-      //   id,
-      //   instructions,
-      //   extendedIngredients,
-      //   aggregateLikes,
-      //   readyInMinutes,
-      //   image,
-      //   title,
-      //   servings,
-      //   vegetarian,
-      //   vegan,
-      //   glutenFree
-      // } = response.data;
-
-      // // get instructions of recipe
-      // response = await getInstructions(this.$route.params.recipeId);
-
-      // // Log the response for debugging
-      // console.log("Response for instructions:", response);
-
-      // // Check if the response status is OK
-      // if (response.status !== 200) {
-      //   this.$router.replace("/NotFound");
-      //   return;
-      // }
-
-      // // Process instructions
-      // let _instructions = response.data
-      //   .map((fstep) => {
-      //     fstep.steps[0].step = fstep.name + fstep.steps[0].step;
-      //     return fstep.steps;
-      //   })
-      //   .reduce((a, b) => [...a, ...b], []);
-
-      // Construct the recipe object
-      // let _recipe = {
-      //   id,
-      //   instructions,
-      //   _instructions,
-      //   analyzedInstructions,
-      //   extendedIngredients,
-      //   aggregateLikes,
-      //   readyInMinutes,
-      //   image,
-      //   title,
-      //   servings,
-      //   vegetarian,
-      //   vegan,
-      //   glutenFree
-      // };
-
-      // // Log the constructed recipe for debugging
-      // console.log("Constructed Recipe:", _recipe);
-
       // Assign the recipe to the component's data
       this.recipe = response.data;
+      this.formattedInstructions = this.recipe.instructions.replace('\n', '<br/>');
     } catch (error) {
       // Log any errors
       console.log("Error:", error);

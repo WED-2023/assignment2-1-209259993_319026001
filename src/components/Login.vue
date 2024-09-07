@@ -117,6 +117,8 @@ export default {
         this.$root.store.username = this.form.username;
         this.$root.store.login(this.form.username);
         this.$router.push("/");
+        // reload page to update
+        window.location.reload()
       } catch (err) {
         console.log(err.response);
         this.form.submitError = err.response.data.message;

@@ -13,10 +13,9 @@
                 <h3>Ingredients:</h3>
                 <ul>
                     <li v-for="(ingredient, i) in step.ingredients" :key="i">
-                        <img :src="ingredient.image" :alt="ingredient.name" class="ingredient-image"/>
-                        {{ ingredient.name }}:
+                        {{ ingredient.name }}
                         <span v-if="ingredient.id && extendedIngredients[ingredient.id]">
-                            {{ extendedIngredients[ingredient.id].amount }} {{ extendedIngredients[ingredient.id].unit }}
+                            - {{ extendedIngredients[ingredient.id].amount }} {{ extendedIngredients[ingredient.id].unit }}
                         </span>
                     </li>
                 </ul>
@@ -40,59 +39,26 @@
 
 
 <script>
-
+import { getRecipe, getInstructions } from '../services/recipes';
 export default {
     data() {
         return {
-            instructions: null,
-            recipe: null,
-            extendedIngredients: {}, // Dictionary to store extended ingredients by id
-            servings: 0 // number of servings, to be updated
-        };
+            instructions: {},
+            recipe: { extendedIngredients: [] },
+            extendedIngredients: {},
+            servings: 0
+            };
     },
-    async created() {
+    async mounted() {
         try {
-            try {
-                // get analayzed instructions of recipe
-                this.axios.defaults.withCredentials=true;
-                const response = await this.axios.get(
-                this.$root.store.server_domain + "/recipes/instructions/" + this.$route.params.recipeId
-                );
-                
-                if (response.status && response.status !== 200) {
-                    this.$router.replace("/NotFound");
-                    return;
-                }
-
-                this.instructions = response.data;
-
-                response = await this.axios.get(
-                this.$root.store.server_domain + "/recipes/get/" + this.$route.params.recipeId
-                );
-                
-                if (response.status && response.status !== 200) {
-                    this.$router.replace("/NotFound");
-                    return;
-                }
-
-                this.recipe = response.data.recipe;
-                this.servings = this.recipe.servings;
-                
-                // Preprocess ingredients
-                this.preprocessIngredients();
-                
-                // Initialize step completion status
-                this.initializeStepCompletion();
-
-                // Initialize local storage dictionary
-                this.initializeLocalStorage();
-            } catch (error) {
-                console.log("error:", error);
-                this.$router.replace("/NotFound");
-                return;
-            }
+            await this.initializeData();
+            await this.preprocessIngredients();
+            await this.initializeStepCompletion();
+            await this.initializeLocalStorage();
+            await this.setLengths();
         } catch (error) {
-            console.log(error);
+            console.error("Initialization error:", error);
+            this.$router.replace("/NotFound");
         }
     },
     methods: {
@@ -105,8 +71,42 @@ export default {
                 this.servings *= 2;
             }
         },
-        preprocessIngredients() {
-            if (this.instructions && this.instructions.steps && this.recipe && this.recipe.extendedIngredients) {
+        async initializeData() {
+            try {
+                console.log("Initializing data...");
+
+                const instructionsResponse = await getInstructions(this.$route.params.recipeId);
+                // Check if the response status is OK
+                if (instructionsResponse.status !== 200 && instructionsResponse.status !== 304) {
+                    this.$router.replace("/NotFound");
+                    return;
+                }
+
+                // Assign the instructions to the component's data
+                this.instructions = instructionsResponse.data[0];
+                console.log("Instructions:", this.instructions);
+                
+                // fetch recipe
+                const recipeResponse = await getRecipe(this.$route.params.recipeId);
+                // Check if the response status is OK
+                if (recipeResponse.status !== 200 && recipeResponse.status !== 304) {
+                    this.$router.replace("/NotFound");
+                    return;
+                }
+
+                // Assign the recipe to the component's data
+                this.recipe = recipeResponse.data;
+                console.log("Recipe:", this.recipe);
+                this.servings = this.recipe.servings;
+
+            } catch (error) {
+                console.error("Error during data initialization:", error);
+                throw error;
+            }
+        },
+        async preprocessIngredients() {
+            console.log("processing ingredients...")
+            if (this.recipe && this.recipe.extendedIngredients) {
                 // Create dictionary of extended ingredients by id
                 this.recipe.extendedIngredients.forEach(ingredient => {
                     this.$set(this.extendedIngredients, ingredient.id, {
@@ -115,32 +115,47 @@ export default {
                     });
                 });
             }
+            console.log("Extended Ingredients:", this.extendedIngredients);
         },
-        initializeStepCompletion() {
-            // initialize the completed property for each step
+        async initializeStepCompletion() {
+            console.log("initializing steps completion progress...")
             if (this.instructions && this.instructions.steps) {
                 this.instructions.steps.forEach(step => {
-                    // retrieve completion status from local storage
-                    const completed = localStorage.getItem(`step-${step.number}`);
+                    // Retrieve completion status from local storage using recipe ID and step number
+                    const completed = localStorage.getItem(`${this.$route.params.recipeId}-step-${step.number}`);
                     this.$set(step, 'completed', completed === 'true');
                 });
             }
         },
-        initializeLocalStorage() {
+        async initializeLocalStorage() {
+            console.log("initializing local storage...")
             // Initialize the dictionary in local storage if it doesn't exist
             if (!localStorage.getItem('completedSteps')) {
                 localStorage.setItem('completedSteps', JSON.stringify({}));
             }
         },
+        async setLengths() {
+            // Check if 'instructionLengths' exists in local storage
+            let lengths = JSON.parse(localStorage.getItem('instructionLengths')) || {};
+
+            // Add current recipe's instructions length
+            const recipeId = this.$route.params.recipeId;
+            if (this.instructions && this.instructions.steps) {
+                lengths[recipeId] = this.instructions.steps.length;
+            }
+
+            // Save the updated dictionary back to local storage
+            localStorage.setItem('instructionLengths', JSON.stringify(lengths));
+        },
         updateCompletionStatus(step) {
-            // Save the completion status to local storage
-            localStorage.setItem(`step-${step.number}`, step.completed);
+            // Save the completion status to local storage using recipe ID and step number
+            localStorage.setItem(`${this.$route.params.recipeId}-step-${step.number}`, step.completed);
             
-            // Calculate the number of completed steps
+            // Calculate the number of completed steps for this specific recipe
             const completedStepsCount = this.instructions.steps.filter(step => step.completed).length;
             
-            // Update the dictionary in local storage
-            let completedStepsDict = JSON.parse(localStorage.getItem('completedSteps'));
+            // Update the dictionary in local storage to keep track of completed steps for this recipe
+            let completedStepsDict = JSON.parse(localStorage.getItem('completedSteps')) || {};
             completedStepsDict[this.$route.params.recipeId] = completedStepsCount;
             localStorage.setItem('completedSteps', JSON.stringify(completedStepsDict));
         }

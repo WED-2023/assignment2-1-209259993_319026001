@@ -30,7 +30,7 @@
         <NewRecipeModal :close="closeModal" />
         </div>
       </transition>
-      <router-view v-if="!isModalVisible" :updateNumOfRecipes="updateNumOfRecipes" />
+      <router-view v-if="!isModalVisible" :mealPlan="mealPlan" :numOfRecipes="numOfRecipes" :updateRecipes="updateRecipes"/>
     </div>
   </div>
 </template>
@@ -50,8 +50,30 @@ export default {
   data() {
     return {
       isModalVisible: false,
-      numOfRecipes: 2 // represents number of recipes in current meal
+      mealPlan: [], // meal plan
+      numOfRecipes: 0 // represents number of recipes in current meal
     };
+  },
+  async created() {
+    // if user is connected, get meal
+    if (localStorage.getItem("username")) {
+      try {
+      this.axios.defaults.withCredentials = true;
+      const response = await this.axios.get(
+        this.$root.store.server_domain + "/users/" + this.$root.store.username + "/meal"
+      );
+      console.log(response);
+      
+      if (response.status === 200) {
+        this.mealPlan = response.data;
+        this.numOfRecipes = response.data.length;
+      } else {
+        this.$router.replace("/NotFound");
+      }
+    } catch (error) {
+      console.error("Error fetching meal plan:", error);
+    }
+    }
   },
   methods: {
     async Logout() {
@@ -76,10 +98,11 @@ export default {
       this.isModalVisible = false;
       console.log("modal closed")
     },
-    updateNumOfRecipes(newNumOfRecipes) {
+    updateRecipes(newRecipes) {
       // log activation of function
-      console.log("updating number of recipes")
-      this.numOfRecipes = newNumOfRecipes;
+      console.log("updating recipes")
+      this.mealPlan = newRecipes;
+      this.numOfRecipes = newRecipes.length;
     }
   }
   }

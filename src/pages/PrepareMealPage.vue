@@ -13,7 +13,7 @@
                   <h5>{{ index + 1 }}. {{ recipe.title }}</h5>
                 </router-link>
                 <p>Ready in: {{ recipe.readyInMinutes }} minutes</p>
-                <b-progress :value="progress[recipe.id]" :max="recipe.analyzedInstructions.length" show-progress animated></b-progress>
+                <b-progress :value="progress[recipe.id]" :max="lengths[recipe.id]" show-progress animated></b-progress>
               </div>
               <div>
                 <b-button @click="removeFromMealPlan(recipe)" variant="outline-danger">X</b-button>
@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import { mockGetMeal, mockRemoveFromMeal } from "../services/user.js";
 import draggable from "vuedraggable";
 import { BProgress } from 'bootstrap-vue';
 
@@ -46,12 +45,13 @@ export default {
     BProgress
   },
   props: {
-    updateNumOfRecipes: Function // function to change number of recipes
+    mealPlan: [], // recipes in meal
+    updateRecipes: Function // function to update recipes
   },
   data() {
     return {
-      mealPlan: [],
       progress: {}, // progress of each meal, dictionary of recipeid: progress
+      lengths: {}, // length of instructions of each meal
       showMealPlan: true, // Toggle for showing/hiding meal plan
       dragOptions: {
         handle: ".drag-handle" // Specify a class for the drag handle
@@ -60,23 +60,19 @@ export default {
   },
   async created() {
     try {
-      this.axios.defaults.withCredentials=true;
-      const response = await this.axios.get(
-        this.$root.store.server_domain + "/users/" + this.$root.store.username + "/meal"
-      );
-      console.log(response);
-      this.lastRecipes = response.data;
-      if (response.status !== 200) {
-        this.$router.replace("/NotFound");
-        return;
+      // Initialize the dictionary in local storage if it doesn't exist
+      if (!localStorage.getItem('completedSteps')) {
+      localStorage.setItem('completedSteps', JSON.stringify({}));
       }
       // get completed steps from local storage
       this.progress =  JSON.parse(localStorage.getItem('completedSteps'));
+
+      // Initialize lengths array
+      this.lengths = JSON.parse(localStorage.getItem('instructionLengths')) || {};
+
       // Print the progress dictionary to the console
       console.log('Progress:', this.progress);
-      // right now fake progress since the recipes are mocks
-      //this.progress = {'324694': 2, '716429': 1}
-      this.mealPlan = response.data.recipes.map((recipe, index) => ({
+      this.mealPlan = response.data.map((recipe, index) => ({
         ...recipe,
         id: recipe.id || index + 1 // Use recipe.id if it exists, otherwise fallback to index + 1
       }));
@@ -85,29 +81,40 @@ export default {
     }
   },
   methods: {
-    clearMealPlan() {
-      this.mealPlan = [];
-      this.updateNumOfRecipes(0);
+    async clearMealPlan() {
+      try {
+        // array of promises for removing each recipe
+        const removePromises = this.mealPlan.map(recipe => this.removeFromMealPlan(recipe));
+        // wait for all recipes to be removed
+        await Promise.all(removePromises);
+        // clear the meal plan array locally
+        this.mealPlan = [];
+        this.updateRecipes(this.mealPlan);
+        // show a success message
+        this.$root.toast("Clear Meal Plan", "Meal plan cleared successfully", "success");
+      } catch (error) {
+        console.error("Error clearing meal plan:", error);
+        this.$root.toast("Clear Meal Plan", "Failed to clear meal plan", "fail");
+      }
     },
     async removeFromMealPlan(recipe) {
       try {
-        this.axios.defaults.withCredentials=true;
       const response = await this.axios.post(
-          this.$root.store.server_domain + "/users/" + this.$root.store.username + "meal/remove",
+          this.$root.store.server_domain + "/users/" + this.$root.store.username + "/meal/remove",
           {
-            recipeId: this.recipe.id
+            recipeId: recipe.id
           }
         );
-      } catch (error) {
-      console.log(error);
-      }
       if (response.status !== 200) {
           this.$root.toast("Remove From meal", response.data.message, "fail");
           return;
         }
-        this.$root.toast("Remove From meal", "Removed From meal successfully", "success");
+      this.$root.toast("Remove From meal", "Removed From meal successfully", "success");
       this.mealPlan = this.mealPlan.filter(r => r.id !== recipe.id);
-      this.updateNumOfRecipes(this.mealPlan.length);
+      this.updateRecipes(this.mealPlan);
+    } catch (error) {
+      console.log(error);
+      }
     },
     toggleShowMealPlan() {
       this.showMealPlan = !this.showMealPlan;
@@ -122,7 +129,7 @@ export default {
       if (savedMealPlan) {
         this.mealPlan = JSON.parse(savedMealPlan);
       }
-    }
+    },
   }
 };
 </script>

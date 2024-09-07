@@ -42,10 +42,10 @@ export default {
       fav: false
     };
   },
-  async created() {
+  async mounted() {
     if (this.$root.store.username) {
-      this.fav = isInFav(this.recipe.id);
-      this.viewed = isInViewed(this.recipe.id);
+      this.fav = await isInFav(this.recipe.id);
+      this.viewed = await isInViewed(this.recipe.id);
     }
   },
   props: {

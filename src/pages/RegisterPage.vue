@@ -157,7 +157,6 @@ import {
   sameAs,
   email
 } from "vuelidate/lib/validators";
-import { mockRegister } from "../services/auth.js";
 export default {
   name: "Register",
   data() {
