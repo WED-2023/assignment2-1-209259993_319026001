@@ -4,12 +4,20 @@
       <p>Welcome to our website! We are highly motivated 3rd year students at the department of Software and Information Systems Engineering at Ben Gurion University.
         This website is our full-stack project for Internet Programming Environments course.
       </p>
-      <h2>Our Project</h2>
-      <p>The projects consists of 3 parts: Frontend, API Document and Backend. In the frontend section
-        we implemented the client side of the website in vue, according to instructions in spec document.
-        The backend section is implemented with node and express, combined with database in SQL.
+      <h2>About the Website</h2>
+      <p>Our recipe website offers a personalized cooking experience where users can sign up, 
+        browse a variety of recipes, and mark their favorites. With step-by-step instructions, 
+        users can easily prepare meals and track their progress as they cook. 
+        Whether you're exploring new dishes or returning to your saved favorites, 
+        the platform makes meal preparation simple and enjoyable for everyone.</p>
+      <h2>About the Project</h2>
+      <p>The projects consists of 3 parts: Frontend, API Document and Backend. In the frontend part
+        we implemented the client side of the website using Vue.js, according to instructions in spec document.
+        The backend part is a server implemented with Node.js and Express.js, using MySQL database for storage.
+        We wrote API Documentation using Swagger. The server also integrates with external API (spoonacular) in order
+        to fetch relevant recipes information.
       </p>
-      <h2>Our Team</h2>
+      <h2>Contact Us</h2>
       <ul>
   <li>
     Lior Aftabi:

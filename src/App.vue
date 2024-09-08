@@ -3,6 +3,7 @@
     <div id="nav">
       <router-link class="nava-link" :to="{ name: 'main' }">Home</router-link>
       <router-link class="nava-link" :to="{ name: 'search' }">Search</router-link>
+      <router-link class="nava-link" :to="{ name: 'about' }">About</router-link>
       <span v-if="!$root.store.username">
         <div class="right-align-not-reg">
         Hello Guest:

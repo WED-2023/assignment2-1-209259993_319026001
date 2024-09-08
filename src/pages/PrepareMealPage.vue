@@ -8,7 +8,7 @@
         <b-card>
           <b-card-header class="drag-handle">
             <div class="d-flex justify-content-between align-items-center">
-              <div>
+              <div class="recipe-details w-100">
                 <router-link :to="{ name: 'make-recipe', params: { recipeId: recipe.id } }">
                   <h5>{{ index + 1 }}. {{ recipe.title }}</h5>
                 </router-link>
@@ -156,9 +156,18 @@ export default {
 
 .meal-plan-item {
   margin-bottom: 20px; 
+  width: 100%;
 }
 
 .drag-handle {
   cursor: move;
+}
+
+.b-card-header {
+  width: 100%;
+}
+
+.b-progress {
+  width: 100%;
 }
 </style>

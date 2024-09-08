@@ -38,7 +38,7 @@ export default {
         intolerance: this.$route.query.intolerance,
         recipeCount: this.$route.query.recipeCount,
         recipes: [],
-        sortCriteria: None
+        sortCriteria: null
     };
 },
 async created() {
@@ -46,15 +46,18 @@ async created() {
 },
 methods: {
     async searchRecipesInDataBase() {
+      console.log("Search: ", this.search, " cuisine: ", this.cuisine, " diet: ", this.diet, " intolerance: ", this.intolerance, " number:", this.recipeCount);
       try {
         const response = await this.axios.get(
           this.$root.store.server_domain + "/recipes/search",
           {
-            recipeName: this.search,
-            cuisine: this.cuisine,
-            diet: this.diet,
-            intolerance: this.intolerance,
-            number: this.recipeCount
+            params: {  // send parameters as query params
+              recipeName: this.search,
+              cuisine: this.cuisine,
+              diet: this.diet,
+              intolerance: this.intolerance,
+              number: this.recipeCount
+            }
           }
         );
         this.recipes = response.data;
