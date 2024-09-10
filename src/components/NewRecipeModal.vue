@@ -180,7 +180,9 @@ export default {
           }
         );
 
-      if (response.response.data.success === true) {
+      console.log('Response:', response);
+
+      if (response.status === 200) {
         this.$bvToast.toast("Recipe Created", {
           title: "Success",
           variant: "success",
@@ -195,7 +197,7 @@ export default {
           solid: true,
           toaster: "b-toaster-top-center"
         });
-        console.error("Failed to add recipe:", response.response.data.message);
+        console.error("Failed to add recipe:", response.data);
       }
       this.resetForm()
     }

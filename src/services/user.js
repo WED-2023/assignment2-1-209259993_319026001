@@ -2,6 +2,10 @@ import { axios, shared_data } from '../main';
 
 // function to check if recipes is in favorites of user
 export async function isInFav(recipeId) {
+  // if recipe ID is undefined, it's a personal recipe of user, so ignore
+  if (typeof recipeId === 'undefined') {
+    return {data:true};
+  }
   try {
     const response = await axios.get(
       `${shared_data.server_domain}/users/${shared_data.username}/isFavorite/${recipeId}`,
@@ -18,6 +22,10 @@ export async function isInFav(recipeId) {
 
 // function to check if recipe was viewed by user
 export async function isInViewed(recipeId) {
+  // if recipe ID is undefined, it's a personal recipe of user, so ignore
+  if (typeof recipeId === 'undefined') {
+    return {data:true};
+  }
   try {
     const response = await axios.get(
       `${shared_data.server_domain}/users/${shared_data.username}/isViewed/${recipeId}`,

@@ -1,16 +1,25 @@
 <template>
   <div class="recipe-preview">
     <div class="recipe-body">
-      <router-link :to="{ name: 'recipe', params: { recipeId: recipe.id } }" @click.native="markAsViewed(recipe.id)">
+      <!-- there's router for recipe from API and recipe from Database, that calls different methods with different params -->
+      <router-link 
+        :to="{
+          name: recipe.id ? 'recipe' : 'personalRecipe',
+          params: { 
+            recipeId: recipe.id ? recipe.id : undefined, 
+            personalRecipeId: recipe.recipeId ? recipe.recipeId : undefined
+          }
+        }" 
+        @click.native="markAsViewed(recipe.id)">
         <img :src="recipe.image" class="recipe-image" />
-      </router-link> 
-      <!-- if favorited, show full icon. else, show to favorite icon -->
-      <button class="fav-button" @click="handleFavClick(recipe.id, $event)">
+      </router-link>
+      <!-- if user is connected: if favorited, show full icon. else, show to favorite icon -->
+      <button v-if="this.$root.store.username" class="fav-button" @click="handleFavClick(recipe.id, $event)">
         <img v-show="!fav" src="@/assets/icons/to-fav.png" class="fav-icon" alt="Favorite" />
         <img v-show="fav" src="@/assets/icons/faved.png" class="fav-icon" alt="Favorited" />
       </button>
-      <!-- if viewed, show viewed icon. -->
-      <img v-if="viewed" src="@/assets/icons/viewed.png" class="viewed-icon" alt="Viewed" />
+      <!-- if user is connected: if viewed, show viewed icon. -->
+      <img v-if="this.$root.store.username && viewed" src="@/assets/icons/viewed.png" class="viewed-icon" alt="Viewed" />
     </div>
     <div class="recipe-footer">
       <div :title="recipe.title" class="recipe-title">
@@ -66,6 +75,10 @@ export default {
       }
     },
     async markAsViewed(recipeId) {
+      // if recipe ID is undefined, it's a personal recipe of user, so ignore
+      if (typeof recipeId === 'undefined') {
+        return;
+      }
       try {
         console.log("markAsViewed called");
         const response = await this.axios.post(
@@ -78,6 +91,7 @@ export default {
         } else {
           console.error("Failed to mark as viewed:", response.message);
         }
+        console.log("Navigating with Recipe ID: ", recipeId, "Or Personal recipe ID:", recipe.recipeId );
       } catch (error) {
         console.log(error);
       } 

@@ -100,34 +100,77 @@ export default {
       catch (error) {
       console.log(error);
       }
-
-    }
-  },
-  async created() {
-    try {
-
-      // Log the request URL for debugging
-      console.log("Request URL:", this.$root.store.server_domain + "/recipes/get/" + this.$route.params.recipeId);
-
+    },
+    // function for loading recipe page when the recipe is a personal recipe, and needs to be loaded directly from database
+    async loadPersonalRecipe() {
+      console.log("Personal Recipe ID: ", this.$route.params.personalRecipeId);
+      const response = await this.axios.get(
+          `${this.$root.store.server_domain}/users/${this.$root.store.username}/recipes/${this.$route.params.personalRecipeId}`
+        );
+        // Check if the response status is OK, if not - redirect to not found
+        if (response.status !== 200 && response.status !== 304) {
+          this.$router.replace("/NotFound");
+          return;
+        }
+        this.recipe = response.data[0];
+        // initialize extended ingredients
+        this.recipe.extendedIngredients = [];
+        // Iterate over the recipe data and get ingredients
+        this.recipe.instructions.forEach(step => {
+          // Extract ingredients
+          step.ingredients.forEach(ingredient => {
+            this.recipe.extendedIngredients.push({
+              name: ingredient.name,
+              amount: ingredient.amount,
+              unit: ingredient.unit,
+              original: ingredient.name + ", " + ingredient.amount + " " + ingredient.unit
+            });
+          });
+        });
+        // map over each step to extract the description of step
+        const descriptions = this.recipe.instructions.map((step, index) => {
+          return `${index + 1}. ${step.description}`;
+        });
+        // join all descriptions with a newline character
+        this.formattedInstructions  = descriptions.join('\n\n');
+        // log the data to ensure it's structured as expected
+        console.log("Loaded personal recipe:", response.data[0], this.formattedInstructions);
+    },
+    // function for loading recipe page when the recipe is a recipe from API and needs to be loaded from it
+    async loadRecipe() {
+      console.log("Recipe ID: ", this.$route.params.recipeId);
       const response = await getRecipe(this.$route.params.recipeId);
-
-      // Log the response for debugging
-      console.log("Response for recipe:", response);
-
       // Check if the response status is OK
       if (response.status !== 200 && response.status !== 304) {
         this.$router.replace("/NotFound");
         return;
       }
-
-      // Log the data to ensure it's structured as expected
-      console.log("Response Data:", response.data);
-
-      // Assign the recipe to the component's data
+      // assign the recipe to the component's data
       this.recipe = response.data;
       this.formattedInstructions = this.recipe.instructions.replace('\n', '<br/>');
+      // Log the data to ensure it's structured as expected
+      console.log("Loaded recipe:", response.data);
+    }
+  },
+  async created() {
+    console.log("Loading recipe...");
+    try {
+      // check if the recipeId is valid, if so - it's a recipe from API
+      if (this.$route.params.recipeId && this.$route.params.recipeId !== "") {
+        await this.loadRecipe();
+      } 
+      // if recipeId is not valid, it can be a personal recipe that the user added so check for personalRecipeId
+      else if (this.$route.params.personalRecipeId && this.$route.params.personalRecipeId !== "") {
+        await this.loadPersonalRecipe();
+      } 
+      // if neither recipeId nor personalRecipeId is valid, redirect to NotFound
+      else {
+        console.log("No valid recipeId or personalRecipeId provided.");
+        this.$router.replace("/NotFound");
+        return;
+      }
     } catch (error) {
-      // Log any errors
+      // log any errors
       console.log("Error:", error);
     }
   }
