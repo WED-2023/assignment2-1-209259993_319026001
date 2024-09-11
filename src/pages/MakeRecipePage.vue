@@ -39,7 +39,7 @@
 
 
 <script>
-import { getRecipe, getInstructions } from '../services/recipes';
+import { getInstructions } from '../services/recipes';
 export default {
     data() {
         return {
@@ -100,18 +100,6 @@ export default {
                     this.$router.replace("/NotFound");
                     return;
                 }
-                
-                // // fetch recipe
-                // const recipeResponse = await getRecipe(this.$route.params.recipeId);
-                // // Check if the response status is OK
-                // if (recipeResponse.status !== 200 && recipeResponse.status !== 304) {
-                //     this.$router.replace("/NotFound");
-                //     return;
-                // }
-
-                // // Assign the recipe to the component's data
-                // this.recipe = recipeResponse.data;
-                // console.log("Recipe:", this.recipe);
                 this.servings = this.recipe.servings;
 
             } catch (error) {

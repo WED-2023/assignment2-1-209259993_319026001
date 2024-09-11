@@ -9,9 +9,9 @@
           <b-card-header class="drag-handle">
             <div class="d-flex justify-content-between align-items-center">
               <div class="recipe-details w-100">
-                <router-link :to="{ name: 'make-recipe', params: { recipeId: recipe.id } }">
+                <div @click="navigateToRecipe(recipe.id)" class="clickable-recipe">
                   <h5>{{ index + 1 }}. {{ recipe.title }}</h5>
-                </router-link>
+                </div>
                 <p>Ready in: {{ recipe.readyInMinutes }} minutes</p>
                 <b-progress :value="progress[recipe.id]" :max="lengths[recipe.id]" show-progress animated></b-progress>
               </div>
@@ -38,6 +38,7 @@
 <script>
 import draggable from "vuedraggable";
 import { BProgress } from 'bootstrap-vue';
+import { getRecipe } from '../services/recipes';
 
 export default {
   components: {
@@ -72,15 +73,40 @@ export default {
 
       // Print the progress dictionary to the console
       console.log('Progress:', this.progress);
-      this.mealPlan = response.data.map((recipe, index) => ({
-        ...recipe,
-        id: recipe.id || index + 1 // Use recipe.id if it exists, otherwise fallback to index + 1
-      }));
     } catch (error) {
       console.error("Error fetching meal plan:", error);
     }
   },
   methods: {
+    // whenever user wants to navigate to recipe, navigate it with propagation of params
+    async navigateToRecipe(id) {
+    const route = await this.getRecipeRoute(id);
+    if (route) {
+      this.$router.push(route); 
+      }
+    },
+    async getRecipeRoute(id) {
+    try {
+      if (id) {
+        // For valid recipeId (API-based recipe)
+        const recipeResponse = await getRecipe(id);
+        if (recipeResponse.status !== 200 && recipeResponse.status !== 304) {
+          // Check if already on /NotFound, avoid redundant navigation
+          if (this.$route.path !== "/NotFound") {
+            this.$router.replace("/NotFound");
+          }
+          return;
+        }
+        console.log("Redirecting to recipe:", recipeResponse.data);
+        return { name: 'make-recipe', params: { recipe: recipeResponse.data, recipeId: id } };
+      }
+    } catch (error) {
+      console.error("Error in getRecipeRoute:", error);
+      if (this.$route.path !== "/NotFound") {
+        this.$router.replace("/NotFound");
+      }
+    }
+  },
     async clearMealPlan() {
       try {
         // array of promises for removing each recipe
@@ -169,5 +195,15 @@ export default {
 
 .b-progress {
   width: 100%;
+}
+
+.clickable-recipe {
+  cursor: pointer; 
+  color: rgb(0, 0, 139); 
+  text-decoration: underline; 
+}
+
+.clickable-recipe:hover {
+  color: rgb(0, 0, 180); 
 }
 </style>

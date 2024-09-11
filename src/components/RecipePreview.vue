@@ -14,12 +14,12 @@
         <img :src="recipe.image" class="recipe-image" />
       </router-link>
       <!-- if user is connected: if favorited, show full icon. else, show to favorite icon -->
-      <button v-if="this.$root.store.username" class="fav-button" @click="handleFavClick(recipe.id, $event)">
-        <img v-show="!fav" src="@/assets/icons/to-fav.png" class="fav-icon" alt="Favorite" />
-        <img v-show="fav" src="@/assets/icons/faved.png" class="fav-icon" alt="Favorited" />
+      <button v-if="this.$root.store.username && recipe.id" class="fav-button" @click="handleFavClick(recipe.id, $event)">
+        <img v-show="!fav && recipe.id" src="@/assets/icons/to-fav.png" class="fav-icon" alt="Favorite" />
+        <img v-show="fav && recipe.id" src="@/assets/icons/faved.png" class="fav-icon" alt="Favorited" />
       </button>
       <!-- if user is connected: if viewed, show viewed icon. -->
-      <img v-if="this.$root.store.username && viewed" src="@/assets/icons/viewed.png" class="viewed-icon" alt="Viewed" />
+      <img v-if="this.$root.store.username && viewed && recipe.id" src="@/assets/icons/viewed.png" class="viewed-icon" alt="Viewed" />
     </div>
     <div class="recipe-footer">
       <div :title="recipe.title" class="recipe-title">
@@ -85,13 +85,13 @@ export default {
           this.$root.store.server_domain + "/users/" + this.$root.store.username + "/view",
           { recipeId: recipeId }
         );
-        if (response.data === true) {
+        if (response.status === 200) {
           this.viewed = true;
           console.log("successfully marked as viewed");
         } else {
           console.error("Failed to mark as viewed:", response.message);
         }
-        console.log("Navigating with Recipe ID: ", recipeId, "Or Personal recipe ID:", recipe.recipeId );
+        console.log("Navigating with Recipe ID: ", recipeId);
       } catch (error) {
         console.log(error);
       } 

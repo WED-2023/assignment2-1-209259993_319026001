@@ -48,7 +48,7 @@ export async function addToFavorites(recipeId) {
       shared_data.server_domain + "/users/" + shared_data.username + "/favorites",
       { recipeId: recipeId }
     );
-    if (response.data === true) {
+    if (response.status === 200) {
       console.log("successfully added to favorites");
       return true;
     } else {
