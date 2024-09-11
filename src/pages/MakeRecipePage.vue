@@ -5,7 +5,7 @@
         <button @click="doubleServings">Double the Servings</button>
         <div v-for="(step, index) in instructions.steps" :key="index" class="step">
             <div class="step-header">
-                <h2>Step {{ step.number }}</h2>
+                <h2>Step {{ index+1 }}</h2>
                 <input type="checkbox" v-model="step.completed" @change="updateCompletionStatus(step)" />
             </div>
             <p>{{ step.step }}</p>
@@ -43,14 +43,17 @@ import { getRecipe, getInstructions } from '../services/recipes';
 export default {
     data() {
         return {
-            instructions: {},
-            recipe: { extendedIngredients: [] },
+            recipeId : null,
+            instructions: {steps: []},
             extendedIngredients: {},
             servings: 0
             };
     },
+    props: ['recipe'], 
     async mounted() {
         try {
+            // define id and procceed to initializing data
+            this.recipeId = this.$route.params.recipeId || this.$route.params.personalRecipeId;
             await this.initializeData();
             await this.preprocessIngredients();
             await this.initializeStepCompletion();
@@ -74,29 +77,41 @@ export default {
         async initializeData() {
             try {
                 console.log("Initializing data...");
-
-                const instructionsResponse = await getInstructions(this.$route.params.recipeId);
-                // Check if the response status is OK
-                if (instructionsResponse.status !== 200 && instructionsResponse.status !== 304) {
-                    this.$router.replace("/NotFound");
-                    return;
+                // check if the recipeId is valid, if so - it's a recipe from API
+                if (this.$route.params.recipeId && this.$route.params.recipeId !== "") {
+                    console.log("Loading instructions of recipe...");
+                    const instructionsResponse = await getInstructions(this.$route.params.recipeId);
+                    // Check if the response status is OK
+                    if (instructionsResponse.status !== 200 && instructionsResponse.status !== 304) {
+                        this.$router.replace("/NotFound");
+                        return;
                 }
-
                 // Assign the instructions to the component's data
                 this.instructions = instructionsResponse.data[0];
                 console.log("Instructions:", this.instructions);
-                
-                // fetch recipe
-                const recipeResponse = await getRecipe(this.$route.params.recipeId);
-                // Check if the response status is OK
-                if (recipeResponse.status !== 200 && recipeResponse.status !== 304) {
+                } 
+                // if recipeId is not valid, it can be a personal recipe that the user added so check for personalRecipeId
+                else if (this.$route.params.personalRecipeId && this.$route.params.personalRecipeId !== "") {
+                    this.instructions.steps = this.recipe.instructions;
+                } 
+                // if neither recipeId nor personalRecipeId is valid, redirect to NotFound
+                else {
+                    console.log("No valid recipeId or personalRecipeId provided.");
                     this.$router.replace("/NotFound");
                     return;
                 }
+                
+                // // fetch recipe
+                // const recipeResponse = await getRecipe(this.$route.params.recipeId);
+                // // Check if the response status is OK
+                // if (recipeResponse.status !== 200 && recipeResponse.status !== 304) {
+                //     this.$router.replace("/NotFound");
+                //     return;
+                // }
 
-                // Assign the recipe to the component's data
-                this.recipe = recipeResponse.data;
-                console.log("Recipe:", this.recipe);
+                // // Assign the recipe to the component's data
+                // this.recipe = recipeResponse.data;
+                // console.log("Recipe:", this.recipe);
                 this.servings = this.recipe.servings;
 
             } catch (error) {
@@ -122,7 +137,7 @@ export default {
             if (this.instructions && this.instructions.steps) {
                 this.instructions.steps.forEach(step => {
                     // Retrieve completion status from local storage using recipe ID and step number
-                    const completed = localStorage.getItem(`${this.$route.params.recipeId}-step-${step.number}`);
+                    const completed = localStorage.getItem(`${this.recipeId}-step-${step.number}`);
                     this.$set(step, 'completed', completed === 'true');
                 });
             }
@@ -139,9 +154,8 @@ export default {
             let lengths = JSON.parse(localStorage.getItem('instructionLengths')) || {};
 
             // Add current recipe's instructions length
-            const recipeId = this.$route.params.recipeId;
             if (this.instructions && this.instructions.steps) {
-                lengths[recipeId] = this.instructions.steps.length;
+                lengths[this.recipeId] = this.instructions.steps.length;
             }
 
             // Save the updated dictionary back to local storage
@@ -149,14 +163,14 @@ export default {
         },
         updateCompletionStatus(step) {
             // Save the completion status to local storage using recipe ID and step number
-            localStorage.setItem(`${this.$route.params.recipeId}-step-${step.number}`, step.completed);
+            localStorage.setItem(`${this.recipeId}-step-${step.number}`, step.completed);
             
             // Calculate the number of completed steps for this specific recipe
             const completedStepsCount = this.instructions.steps.filter(step => step.completed).length;
             
             // Update the dictionary in local storage to keep track of completed steps for this recipe
             let completedStepsDict = JSON.parse(localStorage.getItem('completedSteps')) || {};
-            completedStepsDict[this.$route.params.recipeId] = completedStepsCount;
+            completedStepsDict[this.recipeId] = completedStepsCount;
             localStorage.setItem('completedSteps', JSON.stringify(completedStepsDict));
         }
     }

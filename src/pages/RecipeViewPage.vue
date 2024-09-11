@@ -32,7 +32,12 @@
               {{ fav ? 'Favorited' : 'Add to Favorites' }}
             </button>
             <router-link 
-              :to="{ name: 'make-recipe', params: { recipeId: this.$route.params.recipeId } }" 
+              :to="{ name: 'make-recipe',           
+              params: { 
+                recipeId: recipe.id ? recipe.id : undefined, 
+                personalRecipeId: this.$route.params.personalRecipeId ? this.$route.params.personalRecipeId : undefined,
+                recipe: recipe
+              } }" 
               class="make-recipe-link"
               @click.native="handleMakeRecipe">
               <button class="make-recipe-button">Make This Recipe</button>
@@ -84,7 +89,8 @@ export default {
       console.log('Recipe making process started');
       // redirect to recipe make page
       try {
-      this.axios.defaults.withCredentials=true;
+      // if valid recipe, add to meal
+      if (this.recipe.id && this.recipe.id !== "") {
       const response = await this.axios.post(
           this.$root.store.server_domain + "/users/" + this.$root.store.username + "/meal/add",
           {
@@ -95,6 +101,7 @@ export default {
       // add recipes to local meal
       this.mealPlan.push(this.recipe);
       this.updateRecipes(this.mealPlan);
+      }
       console.log("Redirecting...");
       }
       catch (error) {
@@ -120,6 +127,7 @@ export default {
           // Extract ingredients
           step.ingredients.forEach(ingredient => {
             this.recipe.extendedIngredients.push({
+              id: ingredient.id,
               name: ingredient.name,
               amount: ingredient.amount,
               unit: ingredient.unit,
@@ -128,8 +136,8 @@ export default {
           });
         });
         // map over each step to extract the description of step
-        const descriptions = this.recipe.instructions.map((step, index) => {
-          return `${index + 1}. ${step.description}`;
+        const descriptions = this.recipe.instructions.map((current, index) => {
+          return `${index + 1}. ${current.step}`;
         });
         // join all descriptions with a newline character
         this.formattedInstructions  = descriptions.join('\n\n');
